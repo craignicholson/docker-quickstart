@@ -10,12 +10,12 @@
 ## Server 10.0.0.11 Install docker
 
 ```bash
-$ sudo yum install -y yum-utils device-mapper-persistent-data  lvm2
-$ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-$ sudo yum install docker-ce -y
-$ sudo groupadd docker
-$ sudo usermod -aG  docker $USER
-$ sudo systemctl enable docker && sudo systemctl start docker && sudo systemctl status docker
+sudo yum install -y yum-utils vice-mapper-persistent-data  lvm2
+sudo yum-config-manager --add-repo tps://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce -y
+sudo groupadd docker
+sudo usermod -aG  docker $USER
+sudo systemctl enable docker && sudo systemctl start docker && sudo systemctl status docker
 
 # we are using the private ips for this lab only, external requires more work
 # we need to disable the firewall so our docker manager and node can communicate.
