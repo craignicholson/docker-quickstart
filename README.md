@@ -1,4 +1,6 @@
-# docker-quickstarts
+# docker-quickstart
+
+This is a collection of information used to learn docker.
 
 ## Outline
 
