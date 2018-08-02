@@ -55,67 +55,6 @@ docker pull httpd
 
 ```
 
-## Swarm Mode Lab
-
-- Install Docker
-- Open Network
-
-```bash
-
-# we are using the private ips for this lab only, external requires more work
-# we need to disable the firewall so our docker manager and node can communicate.
-sudo systemctl disable firewalld && sudo systemctl stop firewalld
-
-# name the hosts on both 10.0.0.11 and 10.0.0.12 using the private ips
-vi /etc/hosts
-
-10.0.0.11 mgr01
-10.0.0.12 node01
-
-
-[cloud_user@ip-10-0-0-11 ~]$ cat /etc/hosts
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-
-10.0.0.11 mgr01
-10.0.0.12 node01
-
-# ifconfig to get the IP address
-docker swarm init --advertise-addr 10.0.0.11
-
-Swarm initialized: current node (zs1ksnxaramjrogmb6ec2k312) is now a manager.
-
-To add a worker to this swarm, run the following command:
-
-    docker swarm join --token SWMTKN-1-0qoxmfm6mgh5e6rxagt97vf3jhawgt7vtmbiyyutv5xd7qmjle-2wcu7pibtr8e43617ejm93vxw 10.0.0.11:2377
-
-To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
-
-#$ 10.0.0.12
-docker swarm join --token SWMTKN-1-0qoxmfm6mgh5e6rxagt97vf3jhawgt7vtmbiyyutv5xd7qmjle-2wcu7pibtr8e43617ejm93vxw 10.0.0.11:2377
-
-# 10.0.0.11
-docker node ls
-
-```
-
-## tl;dr uninstall
-
-```bash
-# I should stop docker first... right
-sudo yum remove docker-ce
-sudo rm -rf /var/lib/docker
-```
-
-File Here:
-
-```bash
-
-curl -fsSL get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-
-```
-
 ## Step by Step
 
 1. You will install the 'Docker Community Edition'. Be sure you have removed any previous versions of Docker from the normal repositories.
@@ -188,10 +127,10 @@ Running transaction
   Installing : libaio-0.3.109-13.el7.x86_64                                                                                                                    4/6 
   ...
   [package installation detail here]
-  ...                                                                                                                   6/6 
+  ...                                                                                                                   6/6
 
 Installed:
-  device-mapper-persistent-data.x86_64 0:0.7.0-0.1.rc6.el7                                       lvm2.x86_64 7:2.02.171-8.el7                                      
+  device-mapper-persistent-data.x86_64 0:0.7.0-0.1.rc6.el7                                       lvm2.x86_64 7:2.02.171-8.el7
 
 Dependency Installed:
   device-mapper-event.x86_64 7:1.02.140-8.el7  device-mapper-event-libs.x86_64 7:1.02.140-8.el7  libaio.x86_64 0:0.3.109-13.el7  lvm2-libs.x86_64 7:2.02.171-8.el7 
@@ -199,7 +138,7 @@ Dependency Installed:
 Complete!
 ```
 
-2. Using the appropriate yum utility, add the Docker CE repository at https://download.docker.com/linux/centos/docker-ce.repo; update the local yum cache once added.
+1. Using the appropriate yum utility, add the Docker CE repository at https://download.docker.com/linux/centos/docker-ce.repo; update the local yum cache once added.
 
 ```bash
 [user@craig ~]$ sudo yum-config-manager \
@@ -213,7 +152,7 @@ grabbing file https://download.docker.com/linux/centos/docker-ce.repo to /etc/yu
 repo saved to /etc/yum.repos.d/docker-ce.repo
 ```
 
-3. Execute the appropriate command to install the Docker CE application from the newly-configured repository.
+1. Execute the appropriate command to install the Docker CE application from the newly-configured repository.
 
 ```bash
 [user@craig ~]$ sudo yum install docker-ce 
@@ -258,7 +197,7 @@ Installed: docker-ce.x86_64 0:17.09.0.ce-1.el7.centos
 Dependency Installed: container-selinux.noarch 2:2.21-2.gitba103ac.el7 Complete! 
 ```
 
-4. Once installed, verify that the 'docker' group exists on your system. If not, create one. Once verified or created, add the 'user' account to that group so that sudo rights are not necessary to run Docker commands.
+1. Once installed, verify that the 'docker' group exists on your system. If not, create one. Once verified or created, add the 'user' account to that group so that sudo rights are not necessary to run Docker commands.
 
 ```bash
 [user@craig ~]$ cat /etc/group | grep docker
@@ -269,7 +208,7 @@ docker:x:988:user
 
 ```
 
-5. Using the appropriate service management commands, enable the Docker CE service so that it starts automatically on boot, and then start the Docker CE service. Verify that it is running after. NOTE: You will need to log out and then back in for the new group setting above to work.
+1. Using the appropriate service management commands, enable the Docker CE service so that it starts automatically on boot, and then start the Docker CE service. Verify that it is running after. NOTE: You will need to log out and then back in for the new group setting above to work.
 
 ```bash
 [user@craig ~]$ sudo systemctl enable docker
@@ -300,10 +239,11 @@ Hint: Some lines were ellipsized, use -l to show in full.
 
 ```
 
-6. To test that the service is listening AND Step #4 was correctly completed, pull the default repository image called 'httpd' to your server.
+1. To test that the service is listening AND Step #4 was correctly completed, pull the default repository image called 'httpd' to your server.
 
 ```bash
-[user@craig ~]$ docker pull httpd
+docker pull httpd
+
 Using default tag: latest
 latest: Pulling from library/httpd
 aa18ad1a0d33: Pull complete
@@ -315,12 +255,12 @@ a36c7f15867a: Pull complete
 a0d42b9fc107: Pull complete
 Digest: sha256:cf774f082e92e582d02acdb76dc84e61dcf5394a90f99119d1ae39bcecbff075
 Status: Downloaded newer image for httpd:latest
-``
+```
 
-7. Run the appropriate Docker CE command that will display a list of all images that are locally installed.
-
+1. Run the appropriate Docker CE command that will display a list of all images that are locally installed.
 
 ```bash
+
 [user@craig ~]$ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 httpd               latest              cf6b6d2e8463        42 hours ago        182MB

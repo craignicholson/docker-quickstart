@@ -81,19 +81,21 @@ centos              6                   70b5d81549ec        3 months ago        
 
 ```bash
 docker run -it newcentos:withapache /bin/bash
-https://stackoverflow.com/questions/21280174/docker-centos-image-does-not-auto-start-httpd
+#https://stackoverflow.com/questions/21280174/docker-centos-image-does-not-auto-start-httpd
 
 ```
 
-
-
+```bash
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-[user@craig-nicholsoneswlb5 ~]$ docker images
+$ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 ubuntu              latest              735f80812f90        5 days ago          83.5MB
 centos              6                   70b5d81549ec        3 months ago        195MB
-[user@craig-nicholsoneswlb5 ~]$ docker run -it centos:6 /bin/bash
-[root@844866456de3 /]# yum -y update
+
+$ docker run -it centos:6 /bin/bash
+
+[root@844866456de3 /]$ yum -y update
+
 Loaded plugins: fastestmirror, ovl
 Setting up Update Process
 base                                                                                                                                                      | 3.7 kB     00:00     
@@ -630,19 +632,24 @@ Content-Type: text/html; charset=iso-8859-1
 Connection closed by foreign host.
 [root@844866456de3 /]# exit
 exit
-[user@craig-nicholsoneswlb5 ~]$ docker ps
+
+$ docker ps
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-[user@craig-nicholsoneswlb5 ~]$ docker ps -a
+
+$ docker ps -a
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
 844866456de3        centos:6            "/bin/bash"         4 minutes ago       Exited (1) 5 seconds ago                       awesome_hugle
-[user@craig-nicholsoneswlb5 ~]$ docker commit 844866456de3 newcentos:withapached
+
+$ docker commit 844866456de3 newcentos:withapached
 sha256:18a9ff0a4eb6af169129dbafc51028d6b96057ddc0cab4f6ac3d33e8541d7ec5
-[user@craig-nicholsoneswlb5 ~]$ docker images
+
+$ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 newcentos           withapached         18a9ff0a4eb6        7 seconds ago       461MB
 ubuntu              latest              735f80812f90        5 days ago          83.5MB
 centos              6                   70b5d81549ec        3 months ago        195MB
-[user@craig-nicholsoneswlb5 ~]$ docker run -it newcentos:withapached /bin/bash
+
+$ docker run -it newcentos:withapached /bin/bash
 [root@265c4c0739b1 /]# telnet localhost 80
 Trying 127.0.0.1...
 telnet: connect to address 127.0.0.1: Connection refused
@@ -657,7 +664,6 @@ Trying 127.0.0.1...
 Connected to localhost.
 Escape character is '^]'.
 
-d
 HTTP/1.1 400 Bad Request
 Date: Wed, 01 Aug 2018 21:31:10 GMT
 Server: Apache/2.2.15 (CentOS)
@@ -675,6 +681,5 @@ Content-Type: text/html; charset=iso-8859-1
 <hr>
 <address>Apache/2.2.15 (CentOS) Server at 172.17.0.2 Port 80</address>
 </body></html>
-Connection closed by foreign host.
-[root@265c4c0739b1 /]# 
 
+```

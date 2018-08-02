@@ -1,6 +1,6 @@
-# Docker Files
+# Docker Files Examples
 
-## quickstart01
+## Sample Docker File
 
 ```docker
 FROM centos:latest
@@ -8,8 +8,11 @@ LABLE maintainer"myemail@email.com"
 RUN yum update -y
 ```
 
+Sample Build of a Dockerfile to create an image
+
 ```bash
-docker build -t custom_image:v1 .
+
+$ docker build -t custom_image:v1 .
 
 # output
 Sending build context to Docker daemon  2.048kB
@@ -128,10 +131,12 @@ the entire image.
 
 ## dockerfiles-quickstart02
 
-```bash
-cp Dockerfile Dockerfile2
+Example building from a specific file using the file flag (-f)
 
-docker build -t custom_ubuntu:v1 -f Dockerfile2 .
+```bash
+
+$ cp Dockerfile Dockerfile2
+$ docker build -t custom_ubuntu:v1 -f Dockerfile2 .
 
 Sending build context to Docker daemon  3.072kB
 Step 1/3 : FROM ubuntu:latest
@@ -175,20 +180,22 @@ Removing intermediate container b193108d5e0d
 Successfully built bda01d26ebc3
 Successfully tagged custom_ubuntu:v1
 
-cn$ docker images
+$ docker images
+
 REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
 custom_ubuntu                               v1                  bda01d26ebc3        37 seconds ago      125MB
 
 ```
 
-## docker build from github
+## Dockerfile build from github
 
-## docker build from tar ball
+## Dockerfile build from tar ball
 
-## sqaush
+## Sqaush
 
 ```bash
-craig:quickstart01 cn$ docker build --pull --no-cache  -t optimized:v1 .
+$ docker build --pull --no-cache  -t optimized:v1 .
+
 Sending build context to Docker daemon  3.072kB
 Step 1/3 : FROM centos:latest
 latest: Pulling from library/centos
@@ -368,7 +375,7 @@ install-info: No such file or directory for /usr/share/info/gnupg.info
   Verifying  : gnupg2-2.0.22-4.el7.x86_64                                   8/8 
 
 Updated:
-  binutils.x86_64 0:2.27-28.base.el7_5.1   gnupg2.x86_64 0:2.0.22-5.el7_5       
+  binutils.x86_64 0:2.27-28.base.el7_5.1   gnupg2.x86_64 0:2.0.22-5.el7_5
   python.x86_64 0:2.7.5-69.el7_5           python-libs.x86_64 0:2.7.5-69.el7_5  
 
 Complete!

@@ -15,7 +15,7 @@ The 'docker info' command displays system wide configuration information as seen
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/4/module/150
 
-2) Which of the following configuration files can be used to override the default Docker logging driver?
+1) Which of the following configuration files can be used to override the default Docker logging driver?
 
 Correct
 
@@ -28,7 +28,7 @@ The /etc/docker/daemon.json file is used to override various Docker defaults, in
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/4/module/150
 
-3) When Docker is first installed, what is the name of the default Docker network interface that is created?
+1) When Docker is first installed, what is the name of the default Docker network interface that is created?
 
 Correct
 
@@ -41,7 +41,7 @@ The Docker installation will create a network interface called 'docker0' that wi
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/1/module/150
 
-4) Which directory will contain the Docker image storage layers (by default) on a host?
+1) Which directory will contain the Docker image storage layers (by default) on a host?
 
 Correct
 
@@ -54,7 +54,7 @@ Storage related to Docker image and container layers are stored in /var/lib/dock
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/3/module/150
 
-5) Which of the following commands will enable and start the Docker CE service?
+1) Which of the following commands will enable and start the Docker CE service?
 
 Correct
 
@@ -67,7 +67,7 @@ The Docker CE service can be enabled and started via typical systemd service man
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/1/module/150
 
-6) What information is contained in the '/run/docker.pid' file when the Docker service is running?
+1) What information is contained in the '/run/docker.pid' file when the Docker service is running?
 
 Correct
 
@@ -80,7 +80,7 @@ The 'docker.pid' file only contains the number corresponding to the process of t
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/1/module/150
 
-7) Which file, owned by Docker in the /run directory, determines which accounts can use the service?
+1) Which file, owned by Docker in the /run directory, determines which accounts can use the service?
 
 Correct
 
@@ -93,7 +93,7 @@ The 'docker.sock' command is owned by the 'docker' group. Adding a user to this 
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/1/module/150
 
-8) The 'docker' service can be queried for its state (whether it is stopped or running) with which of the following commands?
+1) The 'docker' service can be queried for its state (whether it is stopped or running) with which of the following commands?
 
 Correct
 
@@ -106,7 +106,7 @@ The Docker service can be managed via standard systemd service management utilit
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/1/module/150
 
-9) Which of the following are requirements for Docker to run but are NOT installed as dependencies? (Choose all that apply)
+1) Which of the following are requirements for Docker to run but are NOT installed as dependencies? (Choose all that apply)
 
 Correct
 
@@ -119,7 +119,7 @@ The first three are not installed with Docker and exist on most full system inst
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/1/module/150
 
-10) Which command will enable the 'user' account to access the Docker application, and the system resources necessary to execute Docker commands, without needing elevated privileges?
+1) Which command will enable the 'user' account to access the Docker application, and the system resources necessary to execute Docker commands, without needing elevated privileges?
 
 Correct
 
@@ -147,7 +147,7 @@ Attaching directly to a running container and then exiting the shell will cause 
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1375/lesson/6/module/150
 
-2) Which of the following configuration files will allow you to change the configured Docker storage driver?
+1) Which of the following configuration files will allow you to change the configured Docker storage driver?
 
 Correct
 
@@ -160,7 +160,7 @@ The /etc/docker/daemon.json file can be used to changed various default Docker c
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1375/lesson/12/module/150
 
-3) Which of the following commands will list the status of a Docker Swarm cluster when run from the primary manager node?
+1) Which of the following commands will list the status of a Docker Swarm cluster when run from the primary manager node?
 
 Correct
 
@@ -173,7 +173,7 @@ Docker typically uses the 'docker' command followed by the object that the subse
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/6/module/150
 
-4) When creating a Dockerfile intended to be used for local image creation in the current directory, which of the following commands will build the file into an image and create it with the name 'myimage:v1'?
+1) When creating a Dockerfile intended to be used for local image creation in the current directory, which of the following commands will build the file into an image and create it with the name 'myimage:v1'?
 
 Correct
 
@@ -186,7 +186,7 @@ When the Dockerfile is in the current context (directory), you build it with an 
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1375/lesson/7/module/150
 
-5) From the list below, which option would you add to the 'docker login' command in order to provide the username to the repository in order to log in?
+1) From the list below, which option would you add to the 'docker login' command in order to provide the username to the repository in order to log in?
 
 Correct
 

@@ -1,6 +1,11 @@
-#  Dockerfile Options, Structure, and Efficiencies
+# Dockerfile Options, Structure, and Efficiencies
 
-craig:quickstart02 cn$ docker build -t  mywebserver:v1 .
+Building from a Dockerfile 'Dockerfile' using the tag flag (-t) to give our image it's own tag.
+
+```bash
+
+$ docker build -t  mywebserver:v1 .
+
 Sending build context to Docker daemon   2.56kB
 Step 1/9 : FROM centos:latest
  ---> 49f7960eb7e4
@@ -192,77 +197,57 @@ Removing intermediate container dd4059f83f36
  ---> b056ac4655b2
 Successfully built b056ac4655b2
 Successfully tagged mywebserver:v1
-craig:quickstart02 cn$ docker ps
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-craig:quickstart02 cn$ docker ps -a
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-craig:quickstart02 cn$ docker images
+```
+
+Check the build for the image
+
+```bash
+$ docker images
 REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
 mywebserver                                v1                  b056ac4655b2        6 hours ago         362MB
-optimied_image                             v1                  284874186ae5        7 hours ago         328MB
-custom_image                               v1                  223aac856154        7 hours ago         328MB
-optimized                                  v1                  8fca7323a784        7 hours ago         328MB
-httpd                                      latest              11426a19f1a2        9 hours ago         178MB
-ubuntu                                     latest              735f80812f90        5 days ago          83.5MB
-hello-world                                latest              2cb0d9787c4d        3 weeks ago         1.85kB
-hello-world                                linux               2cb0d9787c4d        3 weeks ago         1.85kB
-multistage                                 latest              45f0135d3b1a        6 weeks ago         210MB
-psweb                                      latest              c5d9c54d4154        6 weeks ago         70.4MB
-maven                                      latest              878388a112cc        6 weeks ago         635MB
-redis                                      latest              b8398957eeef        6 weeks ago         107MB
-node                                       latest              4df1f3e94ef9        7 weeks ago         674MB
-nginx                                      latest              cd5239a0906a        8 weeks ago         109MB
-centos                                     latest              49f7960eb7e4        8 weeks ago         200MB
-docker/kube-compose-controller             v0.3.5              59d8ccaa8b0c        2 months ago        29.9MB
-docker/kube-compose-api-server             v0.3.5              d32222ae0cf5        2 months ago        42.5MB
-k8s.gcr.io/kube-proxy-amd64                v1.10.3             4261d315109d        2 months ago        97.1MB
-k8s.gcr.io/kube-scheduler-amd64            v1.10.3             353b8f1d102e        2 months ago        50.4MB
-k8s.gcr.io/kube-apiserver-amd64            v1.10.3             e03746fe22c3        2 months ago        225MB
-k8s.gcr.io/kube-controller-manager-amd64   v1.10.3             40c8d10b2d11        2 months ago        148MB
-centos                                     6                   70b5d81549ec        3 months ago        195MB
-k8s.gcr.io/etcd-amd64                      3.1.12              52920ad46f5b        4 months ago        193MB
-alpine                                     latest              3fd9065eaf02        6 months ago        4.15MB
-k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64     1.14.8              c2ce1ffb51ed        6 months ago        41MB
-k8s.gcr.io/k8s-dns-sidecar-amd64           1.14.8              6f7f2dc7fab5        6 months ago        42.2MB
-k8s.gcr.io/k8s-dns-kube-dns-amd64          1.14.8              80cc5ea4b547        6 months ago        50.5MB
-k8s.gcr.io/pause-amd64                     3.1                 da86e6ba6ca1        7 months ago        742kB
-java                                       8-jdk-alpine        3fd9dd82815c        17 months ago       145MB
-cnicholson/simplehttp_autobuild            latest              460d754285d3        3 years ago         523MB
-cnicholson/simplehttp                      1.0                 611deadb3a88        3 years ago         523MB
-craig:quickstart02 cn$ docker build -t  mywebserver:v1 .
-craig:quickstart02 cn$ docker run -d --name testweb1 --rm mywebsrver:v1
-Unable to find image 'mywebsrver:v1' locally
-docker: Error response from daemon: pull access denied for mywebsrver, repository does not exist or may require 'docker login'.
-See 'docker run --help'.
-craig:quickstart02 cn$ docker run -d --name testweb1 --rm mywebserver:v1
+
+$ docker run -d --name testweb1 --rm mywebserver:v1
 cf7abd66a977ed0c55a795c3b3cb95e9ff42f2102e7736155583d95326c145d0
-craig:quickstart02 cn$ docker ps
+
+$ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
 cf7abd66a977        mywebserver:v1      "/bin/sh -c 'apachec…"   3 seconds ago       Up 2 seconds        80/tcp              testweb1
-craig:quickstart02 cn$ docker inspect testweb1 | grep IPAddress
+
+$ docker inspect testweb1 | grep IPAddress
             "SecondaryIPAddresses": null,
             "IPAddress": "172.17.0.2",
                     "IPAddress": "172.17.0.2",
-craig:quickstart02 cn$ docker ps
+$ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
 cf7abd66a977        mywebserver:v1      "/bin/sh -c 'apachec…"   3 minutes ago       Up 3 minutes        80/tcp              testweb1
-craig:quickstart02 cn$ docker ps
+
+$ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
 cf7abd66a977        mywebserver:v1      "/bin/sh -c 'apachec…"   4 minutes ago       Up 3 minutes        80/tcp              testweb1
-craig:quickstart02 cn$ ping 172.17.0.2
-PING 172.17.0.2 (172.17.0.2): 56 data bytes
-Request timeout for icmp_seq 0
-Request timeout for icmp_seq 1
-Request timeout for icmp_seq 2
-Request timeout for icmp_seq 3
-^C
---- 172.17.0.2 ping statistics ---
-5 packets transmitted, 0 packets received, 100.0% packet loss
-craig:quickstart02 cn$ docker stop testweb1
+
+$ docker stop testweb1
 testweb1
-craig:quickstart02 cn$ docker history mywebserver:v1 | wc -l
-      12
-craig:quickstart02 cn$ docker build -t mywebserver:v2 .
+```
+
+## Review the build history
+
+```bash
+
+$ docker history mywebserver:v1
+
+# get a count of the layers created
+$ docker history mywebserver:v1 | wc -l
+12
+
+```
+
+## Re-build the image, and notice we use the cached images
+
+Efficiencies
+
+```bash
+$ docker build -t mywebserver:v2 .
+
 Sending build context to Docker daemon  3.072kB
 Step 1/7 : FROM centos:latest
  ---> 49f7960eb7e4
@@ -445,13 +430,20 @@ Removing intermediate container 0c19331417a8
  ---> 6aa5b7f1a8d9
 Successfully built 6aa5b7f1a8d9
 Successfully tagged mywebserver:v2
-craig:quickstart02 cn$ docker history mywebserver:v2 | wc -l
-      10
-craig:quickstart02 cn$ 
+```
 
+Review the history
+
+```bash
+$ docker history mywebserver:v2 | wc -l
+      10
+```
 
 # SQUASH A FILE
-craig:quickstart02 cn$ docker image history mywebserver:v4
+
+```bash
+
+$ docker image history mywebserver:v4
 IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
 a2e257123a3d        About an hour ago   /bin/sh -c #(nop)  ENTRYPOINT ["/bin/sh" "-c…   0B                  
 234ab3c4d99b        About an hour ago   /bin/sh -c #(nop)  EXPOSE 80                    0B                  
@@ -464,16 +456,16 @@ df94e6bdae5c        About an hour ago   /bin/sh -c #(nop)  ENV ENVIRONMENT=produ
 <missing>           3 months ago        /bin/sh -c #(nop)  LABEL name=CentOS Base Im…   0B                  
 <missing>           3 months ago        /bin/sh -c #(nop) ADD file:2a39fb46f860e75d7…   195MB  
 
-craig:quickstart02 cn$ docker run mywebserver:v4
+$ docker run mywebserver:v4
 26
-craig:quickstart02 cn$ docker ps -a
+$ docker ps -a
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS               NAMES
 41349ad76c1c        mywebserver:v4      "/bin/sh -c 'ls -al …"   3 seconds ago       Exited (0) 1 second ago                       mystifying_wright
-craig:quickstart02 cn$ docker export mystifying_wright > mywebserver4.tar
-craig:quickstart02 cn$ 
+$ docker export mystifying_wright > mywebserver4.tar
+$ 
 
 
-craig:quickstart02 cn$ ls -al
+$ ls -al
 total 754024
 drwxr-xr-x  10 cn  staff        320 Aug  1 10:22 .
 drwxr-xr-x   4 cn  staff        128 Jul 31 15:40 ..
@@ -485,19 +477,19 @@ drwxr-xr-x   4 cn  staff        128 Jul 31 15:40 ..
 -rw-r--r--   1 cn  staff      27045 Aug  1 10:19 README.md
 -rw-r--r--   1 cn  staff         12 Aug  1 08:53 index.html
 -rw-r--r--   1 cn  staff  369484800 Aug  1 10:22 mywebserver4.tar
-craig:quickstart02 cn$ 
+$ 
 
-craig:quickstart02 cn$ docker import mywebserver4.tar mywebserver:v5
+$ docker import mywebserver4.tar mywebserver:v5
 sha256:ceab9e68c0a74c2e32d2e472eafdd5c056e4432a1ce914e60f038159569b46c4
-craig:quickstart02 cn$ docker images
+$ docker images
 REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
 mywebserver                                v5                  ceab9e68c0a7        4 seconds ago       360MB
 mywebserver                                v4                  a2e257123a3d        About an hour ago   464MB
 
-craig:quickstart02 cn$ docker image history mywebserver:v5
+$ docker image history mywebserver:v5
 IMAGE               CREATED              CREATED BY          SIZE                COMMENT
 ceab9e68c0a7        About a minute ago                       360MB               Imported from -
-craig:quickstart02 cn$ docker image history mywebserver:v4
+$ docker image history mywebserver:v4
 IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
 a2e257123a3d        About an hour ago   /bin/sh -c #(nop)  ENTRYPOINT ["/bin/sh" "-c…   0B                  
 234ab3c4d99b        About an hour ago   /bin/sh -c #(nop)  EXPOSE 80                    0B                  
@@ -509,9 +501,11 @@ df94e6bdae5c        About an hour ago   /bin/sh -c #(nop)  ENV ENVIRONMENT=produ
 70b5d81549ec        3 months ago        /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B                  
 <missing>           3 months ago        /bin/sh -c #(nop)  LABEL name=CentOS Base Im…   0B                  
 <missing>           3 months ago        /bin/sh -c #(nop) ADD file:2a39fb46f860e75d7…   195MB   
+```
 
 ## Prepare for a Secure Docker Registry
 
+```bash
 $ sudo yum install openssl
 $ mkdir certs
 $ mkdir auth
@@ -569,9 +563,11 @@ ca.crt
 $ docker run --entrypoint htpasswd registry:2 -Bbn testuser testpassword > auth/htpasswd
 
 $ docker pull registry:2
-
+```
 
 ## Deploy, Configure, Log Into, Push, and Pull an Image in a Registry
+
+```bash
 
 docker run -d -p 5000:5000 -v `pwd`/certs:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/dockerrepo.crt -e REGISTRY_HTTP_TLS_KEY=/certs/dockerrepo.key -v `pwd`/auth:/auth -e REGISTRY_AUTH=htpasswd -e REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd --name reg registry:2
 
@@ -637,6 +633,7 @@ myregistrydomain.com:5000/my-busybox   latest              e1ddd7948a1c        2
 ubuntu                                 latest              735f80812f90        6 days ago          83.5MB
 registry                               2                   b2b03e9146e1        3 weeks ago         33.3MB
 centos                                 6                   70b5d81549ec        3 months ago        195MB
+```
 
 ## Managing Images in Your Private Repository
 
@@ -646,6 +643,7 @@ UCP comes in a later editon
 
 When and how to managed when containers need to restart
 
+```bash
 $ docker run -d --name testweb httpd
 3dc0640167c72aa0daf1a66a3358e1984255e8ec480e68d4a3f79484103f6d18
 
@@ -739,3 +737,4 @@ $ sudo systemctl restart docker
 $ docker ps
 CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
 cc48f68d25db        httpd               "httpd-foreground"   2 minutes ago       Up 3 seconds        80/tcp              testweb
+```

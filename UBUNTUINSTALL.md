@@ -16,6 +16,7 @@ sudo apt-get install \
     ca-certificates \
     curl \
     software-properties-common
+
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo apt-key fingerprint 0EBFCD88
 sudo add-apt-repository \
@@ -28,11 +29,12 @@ sudo apt-get install docker-ce
 sudo cat /etc/group | grep docker
 sudo groupadd docker
 sudo usermod -aG  docker $USER
-# Log out and log back in so that your group membership is re-evaluated.
 
+# Log out and log back in so that your group membership is re-evaluated.
 sudo docker run hello-world
 sudo docker pull httpd
 
+# is this needed on ubuntu???
 # Configure docker to run on boot
 # sudo systemctl enable docker
 
