@@ -1,0 +1,3 @@
+FROM ubuntu:latest
+LABEL maintainer="myemail@email.com"
+RUN apt-get update -y
