@@ -198,3 +198,241 @@ The '--username=[USERNAME]' will allow you to specify the intended account to lo
 
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1375/lesson/14/module/150
+
+
+## ORCHESTRATION (SECTION QUIZ)
+
+1) When run on the manager node, this command will remove the indicated node from the swarm it is a member of.
+
+Correct
+
+Correct answer
+docker node rm [NODE ID]
+
+Explanation
+Docker will apply the 'rm' to the indicated object identified by the NODE ID in the current swarm.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/6/module/150
+
+2) Create a service called 'my_api' with one of the following commands as if it is being run on the manager node based on a locally installed image called 'httpd'.
+
+Correct
+
+Correct answer
+docker service create --name my_api httpd
+
+Explanation
+When run on the manager, Docker will create the indicated 'my_api' service.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/3/module/150
+
+3) Given a token called 'ighhsjkd6637' and an IP of 10.0.1.100, which of the following commands would allow a node to join the indicated cluster of the IP above?
+
+Correct
+
+Correct answer
+docker swarm join --token ighhsjkd6637 10.0.1.100:2377
+
+Explanation
+Docker allows a node with the appropriate token to join the swarm indicated by the IP and port.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/6/module/150
+
+4) Once a node in a cluster has been marked 'down', which of the following commands will allow you to remove that node from the cluster?
+
+Correct
+
+Correct answer
+docker node rm [NODE ID]
+
+Explanation
+Docker tries to use typical/recognizable actions following the object that they are intended to operate on (in this case, 'rm' being a well known command for removing something).
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/6/module/150
+
+5) One of the following commands, when executed on one of the master nodes, will display the logs for the indicated service running on the swarm.
+
+Correct
+
+Correct answer
+docker service logs [SERVICE NAME]
+
+Explanation
+Displays the logs for the indicated service running on an existing cluster.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/10/module/150
+
+6) Which of the following commands will allow you to scale your service, called 'my_api', from whatever its current replica count is to TEN replicas in the cluster?
+
+Correct
+
+Correct answer
+docker service scale my_api=10
+
+Explanation
+Docker allows you to indicate the number of nodes that the indicated service should scale to simply by assigning the appropriate number to the service name.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/4/module/150
+
+7) Which of the following commands will allow you to retrieve the command needed for a node to join a cluster?
+
+Correct
+
+Correct answer
+docker swarm join-token worker
+
+Explanation
+Docker provides the necessary command for any node to join upon creation. The indicated command will allow you to redisplay that information for additional nodes to use.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/5/module/150
+
+8) Undo the 'drain' task applied to a node so that it can be used again for services.
+
+Incorrect
+
+Correct answer
+docker node update --availability active [NODE ID]
+
+Explanation
+Once a node has been drained, it is marked DOWN and must be updated to ACTIVE status so that it's availability for services as advertised.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/3/module/150
+
+9) One of the commands below will drain the indicated node so that future services will not run on it unless the command is undone (when run from the manager node).
+
+Correct
+
+Correct answer
+docker node update --availability drain [NODE ID]
+
+Explanation
+Docker updates the object (node) to DOWN when the availability is indicated to be 'drain' on the indicated NODE ID.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/3/module/150
+
+10) The following option, when added to the 'docker inspect [NODE ID]' command will format the associated output in a more easily readable format.
+
+Correct
+
+Correct answer
+--pretty
+
+Explanation
+The output will be formatted as to be more easily readable on standard output.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/3/module/150
+
+11) Which of the following commands will allow you to scale the number of replicas in your swarm to FIVE once the cluster is already running?
+
+Correct
+
+Correct answer
+docker service scale [SERVICE NAME]=5
+
+Explanation
+The 'scale' option allows you to indicate the service to scale along with the number of replicas to scale to.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/4/module/150
+
+12) Create a service called 'my_api' that contains three replicas from a service image called MYAPI:
+
+Correct
+
+Correct answer
+docker service create --name my_api --replicas 3 MYAPI
+
+Explanation
+The 'service' object allows you to create a service with the specified number of replicas from the indicated service image.
+
+Further Reading
+https://linuxacademy.com/cp/admin/questionadmin/id/6288/quizid/489/moduleid/150
+
+13) Choose the command that will remove a service called 'my_api' from the running swarm.
+
+Correct
+
+Correct answer
+docker service rm my_api
+
+Explanation
+Docker will allow you to remove the named service using the traditional 'rm' command.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/4/module/150
+
+14) Which of the following commands would stop a service called 'myweb' on your cluster?
+
+Incorrect
+
+Correct answer
+docker service rm myweb
+
+Explanation
+Docker requires you to specify the 'service' object when removing a service rather than a single container from a host.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/4/module/150
+
+15) One of the following commands allows you to 'gracefully' leave a swarm that your node is a member of (when executed from the intended node).
+
+Correct
+
+Correct answer
+docker swarm leave
+
+Explanation
+When executed from the node you are removing, you can gracefully leave the cluster without having to use the NODE ID.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/5/module/150
+
+16) Which command will list all the nodes in the swarm when issued on one of the manager nodes in a cluster?
+
+Correct
+
+Correct answer
+docker node ls
+
+Explanation
+The simple 'ls' command applied to the 'node' object from the manager provides a list of all nodes that the manager is aware of.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/6/module/150
+
+17) Which of the following commands will allow you to retrieve the necessary information for a 'manager' node to join an existing cluster?
+
+Correct
+
+Correct answer
+docker swarm join-token manager
+
+Explanation
+Docker will display the necessary information for a manager or node to join a cluster during initialization. This command will allow you to retrieve that information for subsequent joins.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/5/module/150
+
+18) Undo the 'drain' task applied to a node so that it can be used again for services.
+
+Incorrect
+
+Correct answer
+docker node update --availability active [NODE ID]
+
+Explanation
+Once a node has been drained, it is marked DOWN and must be updated to ACTIVE status so that it's availability for services as advertised.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/3/module/150
+
