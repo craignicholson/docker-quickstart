@@ -418,6 +418,7 @@ docker service update
 
 ```bash
 docker service update --replicas 3 testweb
+docker service update --replicas 3 -detach=false testweb
 testweb
 overall progress: 2 out of 3 tasks
 overall progress: 3 out of 3 tasks

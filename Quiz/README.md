@@ -436,3 +436,35 @@ Once a node has been drained, it is marked DOWN and must be updated to ACTIVE st
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/3/module/150
 
+
+
+
+
+6) Which of the following commands will allow you to retrieve the necessary information for a 'manager' node to join an existing cluster?
+
+Incorrect
+
+Correct answer
+docker swarm join-token manager
+
+Explanation
+Docker will display the necessary information for a manager or node to join a cluster during initialization. This command will allow you to retrieve that information for subsequent joins.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1376/lesson/5/module/150
+
+
+
+14) One of the commands below will drain the indicated node so that future services will not run on it unless the command is undone (when run from the manager node).
+
+Incorrect
+
+Correct answer
+docker node update --availability drain [NODE ID]
+
+Explanation
+Docker updates the object (node) to DOWN when the availability is indicated to be 'drain' on the indicated NODE ID.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/3/module/150
+
