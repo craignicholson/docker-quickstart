@@ -358,6 +358,8 @@ testweb2
 
 ## Deploy a SERVICE on a Docker overlay network
 
+```bash
+
 craig@cn:~/github.com/docker-quickstart$ cd 
 craig@cn:~$ docker network ls
 NETWORK ID          NAME                DRIVER              SCOPE
@@ -596,4 +598,7 @@ root@1f67efd0710a:/usr/local/apache2# exit
 exit
 craig@cn:~$ # The last was us pinging the GATEWAY
 craig@cn:~$ # OVERLAY IS GOOD FOR INTER CONTAINER NETWORK COMMUNICATION
+
 ```
+
+## Describe the built in network drivers and the use cases for each and detail the differecnes betweek host and ingress network port publishing mode.
