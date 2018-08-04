@@ -7,6 +7,14 @@ This is a collection of information used to learn docker.
 - [CentOS 7 Install Notes](CENTOSINSTALL.md)
 - [Ubuntu 16.04 Install Notes](UBUNTUINSTALL.md)
 
+## References
+
+### Examples
+
+- https://docs.docker.com/compose/aspnet-mssql-compose/
+- https://training.play-with-docker.com/alacart/
+
+
 ## CentOS script
 
 ```bash

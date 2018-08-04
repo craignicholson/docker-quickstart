@@ -468,3 +468,45 @@ Docker updates the object (node) to DOWN when the availability is indicated to b
 Further Reading
 https://linuxacademy.com/cp/courses/lesson/course/1374/lesson/3/module/150
 
+## Storage
+
+1) When using the --mount option, which of the following parameters would you use to indicate that the container should have access to the host filesystem?
+
+Correct
+
+Correct answer
+type=bind
+
+Explanation
+The 'bind' type will allow the container access to the underlying host operating system from the indicated target directory in the container filesystem.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1379/lesson/3/module/150
+
+2) Which of the following commands would clean up ALL images from a Docker host?
+
+Correct
+
+Correct answer
+docker system prune -a
+
+Explanation
+The 'prune' command, when paired with the '-a' option, will remove all container and image storage from the host.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1379/lesson/4/module/150
+
+3) Which of the following configuration files would allow you to change the default Docker storage driver on a host?
+
+Correct
+
+Correct answer
+/etc/docker/daemon.json
+
+Explanation
+The /etc/docker/daemon.json allows you to change the Docker daemon configuration of many items, including the storage driver.
+
+Further Reading
+https://linuxacademy.com/cp/courses/lesson/course/1379/lesson/1/module/150
+
+
