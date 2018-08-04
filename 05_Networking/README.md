@@ -265,3 +265,93 @@ exit
 craig@cn:~$ # Use daemon.json to set it for all containers
 craig@cn:~$ # Or for each individual containers
 ```
+
+## Publish a Port so tshat an application is accessible externally and identify the port and ip it is on
+
+```bash
+craig@cn:~/github.com/docker-quickstart$ cd
+craig@cn:~$ 
+craig@cn:~$ 
+craig@cn:~$ clear
+craig@cn:~$ # run container
+craig@cn:~$ # use the flag -P to map a containers exposed ports to random port on host 
+craig@cn:~$ # random port will be above 32768
+craig@cn:~$ # you can't pick the rand port #
+craig@cn:~$ docker run -d --name testweb httpd
+dd83f2205e878c6532841c312005da49320883f6a7aa7a7399a1903d41f286f1
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+dd83f2205e87        httpd               "httpd-foreground"   2 seconds ago       Up 1 second         80/tcp              testweb
+craig@cn:~$ docker stop testweb
+testweb
+craig@cn:~$ docker rm testweb
+testweb
+craig@cn:~$ docker run -d --name -P testweb httpd
+Unable to find image 'testweb:latest' locally
+docker: Error response from daemon: pull access denied for testweb, repository does not exist or may require 'docker login'.
+See 'docker run --help'.
+craig@cn:~$ docker run -d --name testweb -P httpd
+0f80579a55ba2cf63d26637953f920fbdd392799b3fc245cfec6e969902235a7
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS                   NAMES
+0f80579a55ba        httpd               "httpd-foreground"   2 seconds ago       Up 1 second         0.0.0.0:32768->80/tcp   testweb
+craig@cn:~$ curl localhost:32768
+<html><body><h1>It works!</h1></body></html>
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED              STATUS              PORTS                   NAMES
+0f80579a55ba        httpd               "httpd-foreground"   About a minute ago   Up About a minute   0.0.0.0:32768->80/tcp   testweb
+craig@cn:~$ # inspect the container to find the IP address
+craig@cn:~$ docker container inspect testweb | grep IPAddress
+            "SecondaryIPAddresses": null,
+            "IPAddress": "172.17.0.2",
+                    "IPAddress": "172.17.0.2",
+craig@cn:~$ # we can get more specific with the --format
+craig@cn:~$ docker container inspect testweb --format="{{.NetworkSettings.Networks.bridge.IPAdress}}"
+
+Template parsing error: template: :1:18: executing "" at <.NetworkSettings.Net...>: map has no entry for key "IPAdress"
+craig@cn:~$ docker container inspect  --format="{{.NetworkSettings.Networks.bridge.IPAdress}}" testweb
+
+Template parsing error: template: :1:18: executing "" at <.NetworkSettings.Net...>: map has no entry for key "IPAdress"
+craig@cn:~$ docker container inspect  --format="{{.NetworkSettings.Networks.bridge.IPAddress}}" testweb
+172.17.0.2
+craig@cn:~$ # if we were connected to another network we would swap that birdge with our own network
+craig@cn:~$ # this makes the application avail to anyone on our network 172.17.0.2:32768
+craig@cn:~$ docker stop testweb
+dotestweb
+craig@cn:~$ docker rm testweb
+testweb
+craig@cn:~$ docker run -d --name testweb --publish 80:80 httpd
+219b548b3aee8708785063319f22b446385b2d67a0a508f288f6fda3581d2561
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS                NAMES
+219b548b3aee        httpd               "httpd-foreground"   5 seconds ago       Up 5 seconds        0.0.0.0:80->80/tcp   testweb
+craig@cn:~$ curl localhost
+<html><body><h1>It works!</h1></body></html>
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS                NAMES
+219b548b3aee        httpd               "httpd-foreground"   24 seconds ago      Up 23 seconds       0.0.0.0:80->80/tcp   testweb
+craig@cn:~$ docker container inspect  --format="{{.NetworkSettings.Networks.bridge.IPAddress}}" testweb
+172.17.0.2
+craig@cn:~$ docker run -d --name testweb2 --publish 5901:80 httpd
+17565d7bd0fb723f19d1bab0b933b34aa59924bfed2fb0eed6f4a2cafba7a5d5
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED              STATUS              PORTS                  NAMES
+17565d7bd0fb        httpd               "httpd-foreground"   4 seconds ago        Up 2 seconds        0.0.0.0:5901->80/tcp   testweb2
+219b548b3aee        httpd               "httpd-foreground"   About a minute ago   Up About a minute   0.0.0.0:80->80/tcp     testweb
+craig@cn:~$ docker container inspect  --format="{{.NetworkSettings.Networks.bridge.IPAddress}}" testweb2
+172.17.0.3
+craig@cn:~$ curl localhost:5901
+<html><body><h1>It works!</h1></body></html>
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED              STATUS              PORTS                  NAMES
+17565d7bd0fb        httpd               "httpd-foreground"   About a minute ago   Up About a minute   0.0.0.0:5901->80/tcp   testweb2
+219b548b3aee        httpd               "httpd-foreground"   2 minutes ago        Up 2 minutes        0.0.0.0:80->80/tcp     testweb
+craig@cn:~$ docker stop testweb
+testweb
+craig@cn:~$ docker stop testweb2 
+testweb2
+craig@cn:~$ docker rm testweb
+testweb
+craig@cn:~$ docker rm testweb2 
+testweb2
+```
