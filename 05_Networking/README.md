@@ -1,8 +1,6 @@
 # Networking
 
 ## Create a Docker Bridge Network for a Developer to Use for Their Containers
-<<<<<<< HEAD
-=======
 
 ```bash
 
@@ -599,4 +597,3 @@ exit
 craig@cn:~$ # The last was us pinging the GATEWAY
 craig@cn:~$ # OVERLAY IS GOOD FOR INTER CONTAINER NETWORK COMMUNICATION
 ```
->>>>>>> 06e546c4ad136e8bfc1cfd91ac6dab204bc71e18
