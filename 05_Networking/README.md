@@ -602,3 +602,23 @@ craig@cn:~$ # OVERLAY IS GOOD FOR INTER CONTAINER NETWORK COMMUNICATION
 ```
 
 ## Describe the built in network drivers and the use cases for each and detail the differecnes betweek host and ingress network port publishing mode.
+
+Types
+ 
+- Bridge
+- None
+- Host
+- Overlay
+- Ingress
+- Docker Gateway Brigde
+
+### Bridge
+
+easy to understand and troubleshoot.
+default on hosts
+
+
+```bash
+
+
+```
