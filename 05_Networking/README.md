@@ -355,3 +355,245 @@ testweb
 craig@cn:~$ docker rm testweb2 
 testweb2
 ```
+
+## Deploy a SERVICE on a Docker overlay network
+
+craig@cn:~/github.com/docker-quickstart$ cd 
+craig@cn:~$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+1632cbeb43ba        bridge              bridge              local
+27db192e0193        host                host                local
+221b28c65035        none                null                local
+ff42167e05c4        ps-bridge           bridge              local
+
+craig@cn:~$ # Missing a few networks here b/c I never started swarm lets do that.
+
+
+craig@cn:~$ ifconfig
+br-ff42167e05c4 Link encap:Ethernet  HWaddr 02:42:42:1b:a8:eb  
+          inet addr:10.0.0.1  Bcast:10.0.0.255  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+docker0   Link encap:Ethernet  HWaddr 02:42:5d:a1:1f:f1  
+          inet addr:172.17.0.1  Bcast:172.17.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::42:5dff:fea1:1ff1/64 Scope:Link
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:28 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:153 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:2654 (2.6 KB)  TX bytes:21511 (21.5 KB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:2052 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2052 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:204305 (204.3 KB)  TX bytes:204305 (204.3 KB)
+
+virbr0    Link encap:Ethernet  HWaddr 00:00:00:00:00:00  
+          inet addr:192.168.122.1  Bcast:192.168.122.255  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+vmnet1    Link encap:Ethernet  HWaddr 00:50:56:c0:00:01  
+          inet addr:172.16.243.1  Bcast:172.16.243.255  Mask:255.255.255.0
+          inet6 addr: fe80::250:56ff:fec0:1/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:227 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+vmnet8    Link encap:Ethernet  HWaddr 00:50:56:c0:00:08  
+          inet addr:192.168.171.1  Bcast:192.168.171.255  Mask:255.255.255.0
+          inet6 addr: fe80::250:56ff:fec0:8/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:230 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+wlp1s0    Link encap:Ethernet  HWaddr ac:2b:6e:5f:b8:2e  
+          inet addr:192.168.116.239  Bcast:192.168.116.255  Mask:255.255.255.0
+          inet6 addr: fe80::b8ed:ecd1:fcf4:f648/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:120366 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:19351 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:165466413 (165.4 MB)  TX bytes:3255049 (3.2 MB)
+
+craig@cn:~$ ^C
+
+craig@cn:~$ docker swarm init -advertise-addr 192.168.116.239
+unknown shorthand flag: 'a' in -advertise-addr
+See 'docker swarm init --help'.
+craig@cn:~$ docker swarm init --advertise-addr 192.168.116.239
+Swarm initialized: current node (smu46t0gppawtq9foticekhmm) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-63cdayq5bl41g8ykrmj9y6eqrbd2tl5adcd8agudb5z4r145us-7o14c0jtvnbklg1269311pkd5 192.168.116.239:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+craig@cn:~$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+1632cbeb43ba        bridge              bridge              local
+e1712d35997b        docker_gwbridge     bridge              local
+27db192e0193        host                host                local
+2bycncbbdz7i        ingress             overlay             swarm
+221b28c65035        none                null                local
+ff42167e05c4        ps-bridge           bridge              local
+craig@cn:~$ 
+
+
+craig@cn:~/github.com/docker-quickstart$ cd
+craig@cn:~$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+1632cbeb43ba        bridge              bridge              local
+e1712d35997b        docker_gwbridge     bridge              local
+27db192e0193        host                host                local
+2bycncbbdz7i        ingress             overlay             swarm
+221b28c65035        none                null                local
+ff42167e05c4        ps-bridge           bridge              local
+craig@cn:~$ docker network create --driver=overlay --subnet=192.168.1.0/24 overlay0
+fo188g1cpeqly1xj70tyf6z5r
+craig@cn:~$ # This is a C Class network with 256 addresses
+craig@cn:~$ docker network inspect overlay0
+[
+    {
+        "Name": "overlay0",
+        "Id": "fo188g1cpeqly1xj70tyf6z5r",
+        "Created": "2018-08-04T14:46:04.285405369Z",
+        "Scope": "swarm",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "192.168.1.0/24",
+                    "Gateway": "192.168.1.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": null,
+        "Options": {
+            "com.docker.network.driver.overlay.vxlanid_list": "4097"
+        },
+        "Labels": null
+    }
+]
+craig@cn:~$ # If you run docker network ls on each node, you will not see overlay0
+craig@cn:~$ # you first need to create a service to use this network
+craig@cn:~$ # and then this network will be transfered to each of the nodes
+craig@cn:~$ docker service create --name testweb -p 80:80 --network=overlay0 --replicas 2  httpd
+7lmrliea83gryeii41jczpmhs
+overall progress: 2 out of 2 tasks 
+1/2: running   [==================================================>] 
+2/2: running   [==================================================>] 
+verify: Service converged 
+
+craig@cn:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+7lmrliea83gr        testweb             replicated          2/2                 httpd:latest        *:80->80/tcp
+craig@cn:~$ docker ps testweb
+"docker ps" accepts no arguments.
+See 'docker ps --help'.
+
+Usage:  docker ps [OPTIONS]
+
+List containers
+craig@cn:~$ docker service ps testweb
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+hx123zqr280o        testweb.1           httpd:latest        cn                  Running             Running 29 seconds ago                       
+zt00oy2rwnix        testweb.2           httpd:latest        cn                  Running             Running 29 seconds ago                       
+craig@cn:~$ # on the other nodes you can no run docker network ls
+craig@cn:~$ # and docker ps
+craig@cn:~$ # and docker container inspect [CONTAINER ID] | grep IPAddress
+craig@cn:~$ # and docker container inspect [CONTAINER ID] | grep IP
+craig@cn:~$ # you can't use these new IPs on the other services
+
+craig@cn:~$ docker service ps testweb
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE           ERROR               PORTS
+hx123zqr280o        testweb.1           httpd:latest        cn                  Running             Running 3 minutes ago                       
+zt00oy2rwnix        testweb.2           httpd:latest        cn                  Running             Running 3 minutes ago                       
+
+craig@cn:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+1f67efd0710a        httpd:latest        "httpd-foreground"   5 minutes ago       Up 5 minutes        80/tcp              testweb.2.zt00oy2rwnix00g0zd2s64mgm
+cf90d46d996d        httpd:latest        "httpd-foreground"   5 minutes ago       Up 5 minutes        80/tcp              testweb.1.hx123zqr280omp9gg9uwxbi2n
+craig@cn:~$ docker exec -it 1f67efd0710a /bin/bash
+root@1f67efd0710a:/usr/local/apache2# exit
+exit
+craig@cn:~$ docker container inspect 1f67efd0710a | grep IPAddress
+            "SecondaryIPAddresses": null,
+            "IPAddress": "",
+                    "IPAddress": "10.255.0.5",
+                    "IPAddress": "192.168.1.5",
+craig@cn:~$ docker container inspect cf | grep IPAddress
+            "SecondaryIPAddresses": null,
+            "IPAddress": "",
+                    "IPAddress": "10.255.0.4",
+                    "IPAddress": "192.168.1.4",
+craig@cn:~$ # overlay allows inter-container communication over this ip range instead of external
+craig@cn:~$ ping 192.168.1.4
+PING 192.168.1.4 (192.168.1.4) 56(84) bytes of data.
+^C
+--- 192.168.1.4 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2031ms
+
+craig@cn:~$ docker exec -it 1f67efd0710a /bin/bash
+root@1f67efd0710a:/usr/local/apache2# whoami
+root
+root@1f67efd0710a:/usr/local/apache2# ifconfig      
+bash: ifconfig: command not found
+root@1f67efd0710a:/usr/local/apache2# ping 192.168.1.4
+PING 192.168.1.4 (192.168.1.4) 56(84) bytes of data.
+64 bytes from 192.168.1.4: icmp_seq=1 ttl=64 time=0.208 ms
+64 bytes from 192.168.1.4: icmp_seq=2 ttl=64 time=0.105 ms
+64 bytes from 192.168.1.4: icmp_seq=3 ttl=64 time=0.093 ms
+^C
+--- 192.168.1.4 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2024ms
+rtt min/avg/max/mdev = 0.093/0.135/0.208/0.052 ms
+root@1f67efd0710a:/usr/local/apache2# ping 192.168.1.5
+PING 192.168.1.5 (192.168.1.5) 56(84) bytes of data.
+64 bytes from 192.168.1.5: icmp_seq=1 ttl=64 time=0.097 ms
+64 bytes from 192.168.1.5: icmp_seq=2 ttl=64 time=0.065 ms
+64 bytes from 192.168.1.5: icmp_seq=3 ttl=64 time=0.066 ms
+^C
+--- 192.168.1.5 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2054ms
+rtt min/avg/max/mdev = 0.065/0.076/0.097/0.014 ms
+root@1f67efd0710a:/usr/local/apache2# ping 192.168.1.1
+PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.204 ms
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=0.082 ms
+64 bytes from 192.168.1.1: icmp_seq=3 ttl=64 time=0.081 ms
+^C
+--- 192.168.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2051ms
+rtt min/avg/max/mdev = 0.081/0.122/0.204/0.058 ms
+root@1f67efd0710a:/usr/local/apache2# exit
+exit
+craig@cn:~$ # The last was us pinging the GATEWAY
+craig@cn:~$ # OVERLAY IS GOOD FOR INTER CONTAINER NETWORK COMMUNICATION
+```
