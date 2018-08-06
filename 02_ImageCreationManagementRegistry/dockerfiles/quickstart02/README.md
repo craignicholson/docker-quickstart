@@ -511,7 +511,6 @@ $ mkdir certs
 $ mkdir auth
 $ mkdir /home/user/certs
 
-$ openssl req -newkey rsa:4096 -nodes -sha256 -keyout dockerrepo.key -x509 -days 365 -out certs/dockerrepo.crt CN=myregistrydomain.com
 $ openssl req -newkey rsa:4096 -nodes -sha256 -keyout certs/dockerrepo.key -x509 -days 365 -out certs/dockerrepo.crt -subj /CN=myregistrydomain.com
 
 $ cd certs/
@@ -552,15 +551,88 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 172.31.43.215 myregistrydomain.com
 
 
--- this failed for me i had to create by hand
-$ mkdir -p /etc/docker/certs.d/myregistrydomain.com:5000
+sudo -i
+mkdir -p /etc/docker/certs.d/myregistrydomain.com:5000
+cd  /etc/docker/certs.d/myregistrydomain.com:5000
+pwd
+/etc/docker/certs.d/myregistrydomain.com:5000
 
 $ sudo cp /home/user/certs/dockerrepo.crt /etc/docker/certs.d/myregistrydomain.com:5000/ca.crt
-
 $ sudo ll /etc/docker/certs.d/myregistrydomain.com:5000
 ca.crt
 
-$ docker run --entrypoint htpasswd registry:2 -Bbn testuser testpassword > auth/htpasswd
+root@craig-nicholsoneswlb4 myregistrydomain.com:5000]# exit
+logout
+[user@craig-nicholsoneswlb4 /]$ docker run --entrypoint htpasswd registry:2 -Bbn testuser testpassword > auth/htpasswd
+-bash: auth/htpasswd: No such file or directory
+[user@craig-nicholsoneswlb4 /]$ ll
+total 32
+lrwxrwxrwx.   1 root root    7 May 10 17:09 bin -> usr/bin
+dr-xr-xr-x.   5 root root 4096 Aug  3 11:55 boot
+drwxr-xr-x.  18 root root 2780 Aug  6 12:24 dev
+drwxr-xr-x. 105 root root 8192 Aug  6 12:32 etc
+drwxr-xr-x.   3 root root   17 Apr 11 04:59 home
+lrwxrwxrwx.   1 root root    7 May 10 17:09 lib -> usr/lib
+lrwxrwxrwx.   1 root root    9 May 10 17:09 lib64 -> usr/lib64
+drwxr-xr-x.   2 root root    6 Apr 11 04:59 media
+drwxr-xr-x.   2 root root    6 Apr 11 04:59 mnt
+drwxr-xr-x.   5 root root   49 Apr 11 04:59 opt
+dr-xr-xr-x. 126 root root    0 Aug  6 12:24 proc
+dr-xr-x---.  10 root root 4096 Aug  6 12:32 root
+drwxr-xr-x.  32 root root 1040 Aug  6 12:29 run
+lrwxrwxrwx.   1 root root    8 May 10 17:09 sbin -> usr/sbin
+drwxr-xr-x.   2 root root    6 Apr 11 04:59 srv
+dr-xr-xr-x.  13 root root    0 Aug  6 12:24 sys
+drwxrwxrwt.   8 root root 4096 Aug  6 12:25 tmp
+drwxr-xr-x.  13 root root 4096 May 10 17:09 usr
+drwxr-xr-x.  21 root root 4096 May 10 17:09 var
+[user@craig-nicholsoneswlb4 /]$ pwd
+/
+[user@craig-nicholsoneswlb4 /]$ cd /home/user
+[user@craig-nicholsoneswlb4 ~]$ pwd
+/home/user
+[user@craig-nicholsoneswlb4 ~]$ ll
+total 8
+drwxrwxr-x. 2 user user   6 Aug  6 12:27 auth
+drwxrwxr-x. 2 user user  48 Aug  6 12:30 certs
+drwxr-xr-x. 2 user user   6 Jan  7  2015 Desktop
+-rw-rw-r--. 1 user user 431 Aug  6  2015 VNCHOWTO
+-rw-------. 1 user user  68 Mar 18  2016 xrdp-chansrv.log
+
+
+[user@craig-nicholsoneswlb4 ~]$ docker run --entrypoint htpasswd registry:2 -Bbn testuser testpassword > auth/htpasswd
+Unable to find image 'registry:2' locally
+2: Pulling from library/registry
+4064ffdc82fe: Pulling fs layer
+c12c92d1c5a2: Pulling fs layer
+4fbc9b6835cc: Pulling fs layer
+765973b0f65f: Pulling fs layer
+3968771a7c3a: Pulling fs layer
+765973b0f65f: Waiting
+3968771a7c3a: Waiting
+4064ffdc82fe: Verifying Checksum
+4064ffdc82fe: Download complete
+c12c92d1c5a2: Verifying Checksum
+c12c92d1c5a2: Download complete
+765973b0f65f: Verifying Checksum
+765973b0f65f: Download complete
+4fbc9b6835cc: Verifying Checksum
+4fbc9b6835cc: Download complete
+3968771a7c3a: Verifying Checksum
+3968771a7c3a: Download complete
+4064ffdc82fe: Pull complete
+c12c92d1c5a2: Pull complete
+4fbc9b6835cc: Pull complete
+765973b0f65f: Pull complete
+3968771a7c3a: Pull complete
+Digest: sha256:51bb55f23ef7e25ac9b8313b139a8dd45baa832943c8ad8f7da2ddad6355b3c8
+Status: Downloaded newer image for registry:2
+
+docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+httpd               latest              11426a19f1a2        5 days ago          178MB
+ubuntu              latest              735f80812f90        10 days ago         83.5MB
+registry            2                   b2b03e9146e1        4 weeks ago         33.3MB
 
 $ docker pull registry:2
 ```
@@ -609,13 +681,10 @@ The push refers to repository [myregistrydomain.com:5000/my-busybox]
 f9d9e4e6e2f0: Pushed 
 latest: digest: sha256:5e8e0509e829bb8f990249135a36e81a3ecbe94294e7a185cc14616e5fad96bd size: 527
 
-$ docker rmi myregistrydomain.com:5000/my-busybox 
-Untagged: myregistrydomain.com:5000/my-busybox:latest
-Untagged: myregistrydomain.com:5000/my-busybox@sha256:5e8e0509e829bb8f990249135a36e81a3ecbe94294e7a185cc14616e5fad96bd
+$ docker rmi busybox 
 
 $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-busybox             latest              e1ddd7948a1c        25 hours ago        1.16MB
 ubuntu              latest              735f80812f90        6 days ago          83.5MB
 registry            2                   b2b03e9146e1        3 weeks ago         33.3MB
 centos              6                   70b5d81549ec        3 months ago        195MB
@@ -626,9 +695,9 @@ Using default tag: latest
 latest: Pulling from my-busybox
 Digest: sha256:5e8e0509e829bb8f990249135a36e81a3ecbe94294e7a185cc14616e5fad96bd
 Status: Downloaded newer image for myregistrydomain.com:5000/my-busybox:latest
+
 [user@craig-nicholsoneswlb5 ~]$ docker images
 REPOSITORY                             TAG                 IMAGE ID            CREATED             SIZE
-busybox                                latest              e1ddd7948a1c        25 hours ago        1.16MB
 myregistrydomain.com:5000/my-busybox   latest              e1ddd7948a1c        25 hours ago        1.16MB
 ubuntu                                 latest              735f80812f90        6 days ago          83.5MB
 registry                               2                   b2b03e9146e1        3 weeks ago         33.3MB

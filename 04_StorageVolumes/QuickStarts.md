@@ -1,5 +1,22 @@
 # Quick Starts
 
+## Map volume from mac os to nginx 
+
+docker run -d --name testweb -p 80:80 -v /Users/cn:/usr/share/nginx/html  nginx
+echo "Docker Volume Example" > /Users/cn/index.html
+curl http://localhost/
+
+What to do with this... 
+
+echo "Docker Volume Example" > /Users/cn/www/development/index.html
+echo "Docker Volume Example" > /Users/cn/www/production/index.html
+echo "Docker Volume Example" > /Users/cn/www/qa/index.html
+
+docker run -d --name testweb -p 8080:80 -v /Users/cn/www/development:/usr/share/nginx/html  nginx
+docker run -d --name testweb -p 80:80 -v /Users/cn:/www/production:usr/share/nginx/html  nginx
+docker run -d --name testweb -p 8082:80 -v /Users/cn/www/qa:/usr/share/nginx/html  nginx
+
+
 ## Exercise: Creating and Working With Volumes
 
 1. Using the appropriate Docker command, create a storage volume for use by your containers, call the volume 'test-volume'

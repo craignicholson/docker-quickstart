@@ -601,10 +601,10 @@ craig@cn:~$ # OVERLAY IS GOOD FOR INTER CONTAINER NETWORK COMMUNICATION
 
 ```
 
-## Describe the built in network drivers and the use cases for each and detail the differecnes betweek host and ingress network port publishing mode.
+## Describe the built in network drivers and the use cases for each and detail the differecnes betweek host and ingress network port publishing mode
 
 Types
- 
+
 - Bridge
 - None
 - Host
@@ -614,54 +614,116 @@ Types
 
 ### Bridge
 
-Bridge
 • Simple to understand, use and troubleshoot, and is the default on stand-alone Docker hosts.
 • Consists of a private network that is internal to the host system; all containers implemented
 on this host using Bridge networking can communicate.
 • External access is granted by port exposure of the container’s services and accessed by the host OR static routes added with the host as the gateway for that network.
 
-None
+### None
+
 • Used when the container(s) in question need absolutely no networking access at all.
 • Containers operating on this driver can only be accessed on the host they are running on.
 • These containers can be attached directly (using ‘docker attach [containerid]’) or executing by another command on the running container (using ‘docker exec -it [containerid] [command]).
 • Not commonly used.
- 
 
- Host
+### Host
+
 • Sometimes referred to as ‘Host Only Networking’.
 • Only accessible via the underlying host.
 • Access to services can only be provided by exposing container service ports to the host system.
- 
 
+### Overlay
 
-Overlay
 • Allows communication among all Docker Daemons that are participating in a Swarm.
 • It is a ‘Swarm Scope’ driver in that it extends itself (building previously non-existent networks
 on Workers if needed) to all daemons in the Swarm cluster.
 • Allows the communication of multiple services that may have replicas running on any number of Workers in the Swarm, regardless of their origination or destination.
 • Default mode of Swarm communication.
- 
 
- Ingress
+### Ingress
+
 • Special overlay network that load balances network traffic amongst a given service’s working nodes.
 • Maintains a list of all IP addresses from nodes that participate in that service (using the IPVS module) and when a request comes in, routes to one of them for the indicated service.
 • Provides the ‘routing mesh’ that allows services to be exposed to the external network without having a replica running on every node in the Swarm.
- 
- Docker Gateway Bridge
+
+### Docker Gateway Bridge
+
 • Special bridge network that allows overlay networks (including Ingress) access to an individual Docker daemon’s physical network.
 • Every container run within a service is connected to the local Docker daemon’s host network.
 • Automatically created when a Swarm is initialized or joined.
- 
- Two types of port publishing modes: • Host
+
+### Two types of port publishing modes: • Host & Ingress
+
+Hosts
+
 • Ports for containers are only available on the underlying host system and are NOT available for services outside of the host where that instance exists.
 • Used in single host environments or in environments where you need complete control over routing.
-• You are responsible for knowing where all instances are at all times, controlled with ‘mode=host’
-• Ingress
-in deployment.
+• You are responsible for knowing where all instances are at all times, controlled with ‘mode=host’ in deployment.
+
+Ingress
+
 • Since it is responsible for ‘routing mesh’, it makes all published ports available on all hosts (nodes or Workers) participating in the cluster so that the service is accessible from every node regardless of whether there is a service replica running on it at any given time.
- 
- 
-```bash
 
+You can use any node to hit a service b/c of the ingress network.
 
-```
+## Troubleshoot Container and Engine Logs to Understand Connectivity Issues Between Containers
+
+SEE NOTES ON WEB SITE< GOT TO GET THEM AND PASTE HERE>
+
+## Understanding the Container Network Model
+
+Implementation that formalizes how networking for containers is provided while allowing abstractions that are used to support multiple network drivers. It is built on three main components:
+Components
+• Sandbox – encompasses the network stack configuration, including management of interfaces, routing and DNS of 1 to N endpoints on 1 to N networks.
+• Endpoint – interfaces, switches, ports, etc and belong to only one network at a time
+• Network – a collection of endpoints that can communicate directly (bridges, VLANS, etc) and can consist of 1 to N endpoints
+ 
+image
+
+The CNM and Docker Daemon interface at multiple points in a container’s lifecycle depending on its implementation as a single container, single host or a multi-replica service communicating in an overlay across a Docker Swarm cluster.
+Objects inside the network model include:
+• Network Controller
+• Driver
+• Network
+• Endpoint
+• Sandbox
+Each of those having (potentially) options and labels, and interacting with each other as specified.
+
+### Docker Networking and IPAM (Internet Protocol Address Management)
+
+Managing addresses across multiple hosts on separate physical networks while providing routing to the underlying swarm networks externally is ‘the IPAM problem’ for Docker (and any other container cluster management system).
+Depending on the network driver chose, IPAM is handled at different layers in the stack. On a single host, IPAM is not as challenging and routing is generally handled manually or through port exposure and each network is specific to the host system.
+Network drivers enable IPAM through DHCP drivers or plugin drivers so that complex implementations support what would normally be overlapping addresses.
+
+## Understand and Describe the Traffic Types that Flow Between the Docker Engine, Registry and UCP Components
+
+linuxacademy-dockercertassoc-dockerengdtrucpcomms_1513955655.pdf
+
+### UCP Components (Manager)
+
+UCP Component | Description
+ucp-agent | Monitors the node and ensures the right UCP services are running.
+ucp-reconcile | When the agent detects the node is not running correct components, it has the container convert to the desired state.
+ucp-auth-api | Centralized service for identity and authentication used by UCP and DTR.
+ucp-auth-store | Stores authentication configurations and data for users, organizations, and teams.
+ucp-auth-worker | Performs scheduled LDAP sync (when configured) and cleans authentication and authorization data.
+ucp-client-root-ca | Certificate authority to sign client bundles.
+ucp-cluster-root-ca | Certificate authority used for TLS communication between UCP components.
+ucp-controller | UCP Web Server.
+ucp-dsinfo | Docker system information collection script to assist with troubleshooting.
+ucp-kv | Used to store the UCP configurations (internal use only).
+ucp-metrics | Used to collect and process metrics for a node (i.e. disk available).
+ucp-proxy | A TLS proxy that allows the local Docker Engine secure access to the UCP components.
+ucp-swarm-manager | Used to provide backwards-compatibility with Docker Swarm.
+
+### UCP Components (Workers)
+
+ucp-agent | Monitors the node and ensures the right UCP services are running.
+ucp-dsinfo | Docker system information collection script to assist with troubleshooting.
+ucp-reconcile | When the agent detects the node is not running correct components, it has the container convert to the desired state.
+ucp-proxy | A TLS proxy that allows the local Docker Engine secure access to the UCP components.
+
+Communication between the Docker Engine, UCP, and DTR can happen:
+• Over TCP/UDP – depends on the port and whether a response is required or if the message is a notification.
+• IPC – services on the same node can use IPC to communicate amongst each other.
+• API – will take place over TCP (of course), but uses the API directly to query and update the components across the entire cluster.

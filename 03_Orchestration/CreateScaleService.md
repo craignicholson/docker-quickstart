@@ -337,6 +337,22 @@ wcqqwcmh5x8s0omsqlc89il89     craig-nicholsoneswlb6.mylabserver.com   Ready     
 
 ```
 
+Demote a mangager
+https://docs.docker.com/engine/swarm/manage-nodes/#promote-or-demote-a-node
+
+
+[user@craig-nicholsoneswlb4 ~]$ docker node demote wcqqwcmh5x8s0omsqlc89il89
+Manager wcqqwcmh5x8s0omsqlc89il89 demoted in the swarm.
+
+[user@craig-nicholsoneswlb4 ~]$ docker node ls
+ID                            HOSTNAME                                STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERS
+ION
+snuv4c6j0c1fhjoyyzlk9kfd8 *   craig-nicholsoneswlb4.mylabserver.com   Ready               Active              Leader              18.06.0-ce
+ny86k7pdofcjjzfhkk533ipet     craig-nicholsoneswlb5.mylabserver.com   Ready               Active                                  18.06.0-ce
+r5x2dj69h7jamdbtau5qrp0u6     craig-nicholsoneswlb6.mylabserver.com   Down                Active                                  18.06.0-ce
+wcqqwcmh5x8s0omsqlc89il89     craig-nicholsoneswlb6.mylabserver.com   Ready               Active                                  18.06.0-ce
+
+
 ## Final Lap Use Case
 
 Your development team is now working on a new web application service and needs a basic cluster of web servers that they can throw load against in order to test performance.
