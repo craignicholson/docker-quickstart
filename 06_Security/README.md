@@ -111,6 +111,8 @@ Review it on hub.docker
 
 ## Identity Roles
 
+Making sure we understand the concept of roles in UCP will determine our ability to apply them in RBAC. This lesson will help define what roles have what types of permissions.
+
 With the Universal Control Plane, Docker has two types of users:
 
 - Adminstrators - can make changes to the UCP swarm
@@ -135,3 +137,100 @@ SCHEDULER | allowed to view nodes and schedule workloads. need additional resour
 , like container view to perform other tasks
 FULL CONTROL | user allowed to view and edit network, images, volumes as well as create containers and services withour restrition. 
 They CANNOT see other users containers and services.
+
+## Configure RBAC and Enable LDAP in UCP
+
+Requires EE - https://docs.docker.com/ee/
+
+Enabling LDAP for authentication allows you to integrate with your user management and authorization solution. Applying roles to your users and teams allow you to control the part they play in your cluster management and utilization implementation.
+
+Lots of UI stuff which is in the EE application and not in CE.
+
+## Demonstrate Creation and Use of UCP Client Bundles and Protect the Docker Daemon With Certificates
+
+UCP Client Bundles allow you to provide a preconfigured setup for user accounts set up in UCP, along with the necessary trusted certificates to connect to and use the UCP cluster. You can then control what that user can do by granting roles to the account in UCP; we will show you how to accomplish all of that.
+
+## Describe the Process to Use External Certificates with UCP and DTR
+
+Using certificates from a Certificate Authority (like Verisign) is straightforward in your environment. We will show you where your new keys and certificates are installed in UCP.
+
+https://docs.docker.com/ee/ucp/
+
+## Describe Default Docker Swarm and Engine Security
+
+Docker Engine Security
+Docker Engine security involves the consideration of four areas:
+
+1. The host’s kernel support of namespaces and cgroups.
+1. Limited ‘attack surface’ of the Docker daemon.
+1. Customization of container configuration profiles.
+1. Hardening features of the kernel and their interaction with underlying containers.
+
+Namespaces provide isolation to running containers so they cannot see or affect other processes on the host. Namespaces provide an isolated process, network, and volume stacks to enable that isolation.
+Control groups implement resource management (allocating and reporting) to further minimize the effect of a container on a host. As a result, both play a role in minimizing (or mitigating completely) various security risks, such as the denial of service attacks on a container, privilege escalation exploits, etc.
+ 
+Docker Daemon requires root privilages. (Lots of talk about getting rid of that soon... )
+
+
+Docker Engine security involves the consideration of four areas:
+
+1. The host’s kernel support of namespaces and cgroups.
+1. Limited ‘attack surface’ of the Docker daemon.
+1. Customization of container configuration profiles.
+1. Hardening features of the kernel and their interaction with underlying containers.
+
+The ‘attack surface’ is affected by the fact that the **daemon requires ROOT account privileges**, so more care than normal should be applied when changing parameters and/or known secure default configurations.
+Even when ‘trusted users’ are given access to the daemon for control, unknowingly malicious images with ‘docker load’ type commands is a concern. The addition of Docker Enterprise Edition features with UCP, DTR, and Docker Content Trust can address some of those risks.
+
+Docker Swarm
+
+In addition to Docker Engine security protections, 
+
+**Docker Swarm makes heavy use of the Overlay Network Model.**
+
+This model comes prepared with security and support for communication encryption (using the – opt encrypted option when creating the network for use).
+
+> -opt ecnrypted option
+
+NOTE: This does NOT extend to Windows, where encryption is not supported.
+
+## Describe Mutually Authenticated TLS (MTLS)  
+
+Just a passing question... What is it? Where is it used?
+
+What is Mutually Authenticated TLS?
+
+One of the primary goals of Docker Swarm is to be ‘secure by default’; a method to ensure communication within the swarm is implemented.
+
+Mutually Authenticated TLS is the implementation that was chosen to secure that communication. 
+
+Any time a swarm is initialized, a self-signed Certificate Authority (CA) is generated and issues certificates to every node (manager or worker) to facilitate those secure communications.
+
+TLS (Transport Layer Security) was born from the Secure Sockets Layer (SSL) whose name is more well known. However, TLS has since superseded its use. Although their names are often used interchangeably, TLS provides greater security through message authentication, key material generation, and supported cipher suites.
+
+Using the temporary certificates that are generated during a swarm initialization, workers and managers can register themselves with the swarm for communication.
+
+Using TLS (Transport Layer Security) provides both privacy and data integrity in communications within the swarm.
+The transaction consists of a two-layer (Record and Handshake) protocol that provides both security and authentication.
+
+### Key rotation
+
+https://docs.docker.com/engine/swarm/swarm_manager_locking/
+https://docs.docker.com/engine/swarm/swarm_manager_locking/#rotate-the-unlock-key
+
+docker swarm init --autolock
+
+Swarm initialized: current node (k1q27tfyx9rncpixhk69sa61v) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join \
+    --token SWMTKN-1-0j52ln6hxjpxk2wgk917abcnxywj3xed0y8vi1e5m9t3uttrtu-7bnxvvlz2mrcpfonjuztmtts9 \
+    172.31.46.109:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+To unlock a swarm manager after it restarts, run the `docker swarm unlock`
+command and provide the following key:
+
+    SWMKEY-1-WuYH/IX284+lRcXuoVf38viIDK3HJEKY13MIHX+tTt8
