@@ -12,7 +12,7 @@ Simple quick refernce of commands and notes to memorize.
 
 ### Docker Installation & Configuration
 
-- Centos
+- [Centos](01_InstallationConfiguration/CENTOSINSTALL.md)
 - Ubuntu 16.04
 
 See references for operating system updates from Docker.
@@ -107,31 +107,49 @@ See references for operating system updates from Docker.
 
 ### Networking
 
-Create a Docker Bridge Network for a Developer to Use for Their Containers
-Configure Docker for External DNS
-Publish a Port So That an Application Is Accessible Externally and Identify the Port and IP It Is On
-Deploy a Service on a Docker Overlay Network
-Describe the Built In Network Drivers and Use Cases for Each and Detail the Difference Between Host and Ingress Network Port Publishing Mode
-Troubleshoot Container and Engine Logs to Understand Connectivity Issues Between Containers
-Understanding the Container Network Model
-Understand and Describe the Traffic Types that Flow Between the Docker Engine, Registry and UCP 
-Exercise: Exposing Ports to Your Host System
-Exercise: Create a Docker Service on Your Swarm and Expose Service Ports to Each Host
-Exercise: Utilize External DNS With Your Containers
-Exercise: Create a New Bridge Network and Assign a Container To It
+- Create a Docker Bridge Network for a Developer to Use for Their Containers
+- Configure Docker for External DNS
+- Publish a Port So That an Application Is Accessible Externally and Identify the Port and IP It Is On
+- Deploy a Service on a Docker Overlay Network
+- Describe the Built In Network Drivers and Use Cases for Each and Detail the Difference Between Host and Ingress Network Port Publishing Mode
+- Troubleshoot Container and Engine Logs to Understand Connectivity Issues Between Containers
+- Understanding the Container Network Model
+- Understand and Describe the Traffic Types that Flow Between the Docker Engine, Registry and UCP 
+- Exercise: Exposing Ports to Your Host System
+- Exercise: Create a Docker Service on Your Swarm and Expose Service Ports to Each Host
+- Exercise: Utilize External DNS With Your Containers
+- Exercise: Create a New Bridge Network and Assign a Container To It
 
 ### Security
 
-Describe the Process of Signing an Image and Enable Docker Content Trust
-Demonstrate That an Image Passes a Security Scan
-Identity Roles
-Configure RBAC and Enable LDAP in UCP
-Demonstrate Creation and Use of UCP Client Bundles and Protect the Docker Daemon With Certificates
-Describe the Process to Use External Certificates with UCP and DTR
-Describe Default Docker Swarm and Engine Security
-Describe MTLS
+- Describe the Process of Signing an Image and Enable Docker Content Trust
+- Demonstrate That an Image Passes a Security Scan
+- Identity Roles
+- Configure RBAC and Enable LDAP in UCP
+- Demonstrate Creation and Use of UCP Client Bundles and Protect the Docker Daemon With Certificates
+- Describe the Process to Use External Certificates with UCP and DTR
+- Describe Default Docker Swarm and Engine Security
+- Describe MTLS
 
 ### Example Applications
+
+- Exercise: Create a Swarm Cluster
+- Exercise: Start a Service and Scale It Within Your Swarm
+- Exercise: Demonstrate How Failure Affects Service Replicas in a Swarm
+- Exercise: Reassign a Swarm Worker to Manager
+- Hands-on Labs: Configure a Swarm and Scale Services Within Your Cluster
+
+- Exercise: Creating and Working With Volumes
+- Exercise: Using External Volumes Within Your Containers
+- Exercise: Creating a Bind Mount to Link Container Filesystem to Host Filesystem
+- Exercise: Display Details About Your Containers and Control the Display of Output
+- Hands-on Labs: Working with the DeviceMapper Storage Driver
+- Hands-on Labs: Configuring Containers to Use Host Storage Mounts
+
+- Exercise: Exposing Ports to Your Host System
+- Exercise: Create a Docker Service on Your Swarm and Expose Service Ports to Each Host
+- Exercise: Utilize External DNS With Your Containers
+- Exercise: Create a New Bridge Network and Assign a Container To It
 
 ## References
 
