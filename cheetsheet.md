@@ -7,6 +7,10 @@ docker --version
 
 ps aux | grep docker
 
+REVIEW ON NIX
+If the output of docker info shows Storage Driver: overlay in which directory will images be located?
+/etc/var/lib/docker/overlay
+
 --everything is here ...on nix
 /etc/var/lib/docker/containers
 /etc/var/lib/docker/devicemapper
@@ -96,6 +100,14 @@ docker logs --tail 25 myweb_container
 
 docker swarm init --advertise-addr IPADDRESS
 
+--SCALE A SERVICE - YOU CAN's SCALE A SWARM.  SWARM is ALL THE SCALLED SERVICES
+docker service scale myservice=5
+docker service scale myservice=5
+docker service scale myservice=5
+docker service scale myservice=5
+docker service scale myservice=5
+docker service scale myservice=5
+docker service scale myservice=5
 docker service scale myservice=5
 
 docker login
@@ -169,7 +181,17 @@ docker service create --name myexample --replicas 4 IMAGENAME
 docker swarm init --force-new-cluster --advertise-addre IPADDRESS
 
 -- re-init swarm to keep it from connecting to old nodes
-docker swarm init --force-new-cluster 
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+
+Rebuild a swarm so it does not connect to old nodes
+
+
 
 -- make a work node also a manager in a swarm
 docker node promote NODEID
@@ -197,9 +219,17 @@ docker service ls
 docker node rm NODEID
 - only works on a manager
 
+REVIEW
 what performs a docker service create
 - no volume available, when -v or --volume is used
 - --mount[source/path], target=[path] is used
+
+REVIEW
+Remove drained nodes or re-add previously drained nodes
+it's a node
+
+docker node update --availability drain NODEID
+docker node update --availability active NODEID
 
 --draining... a cluster node to prevent services
 --from running on it in the future
@@ -212,7 +242,17 @@ docker node update --availability drain NODEID
 docker node update --availablity active NODEID
 --from the manager
 
+REVIEW
+Which package should be installed to manage the Docker0 interface?
+bridge-utils
+
+on Centos we use net-utils...
+
+
+
+REVIEW
 export an image to a tar file
+A tar archive containing all image layers and tags
 docker save -o http-latest.tar httpd:latest
 
 docker swarm join TOKEN:IP
@@ -233,6 +273,7 @@ docker service create
   -env
   --workdir
 
+REVIEW
 Information about global service.
  - runs on each active node in the swarm
  --mode [global]
@@ -252,14 +293,43 @@ docker exec -it IMAGENAME \bin\bash
 docker login --username=COMPANY_ACCOUNT
 
 Export/Save
+export saves and image by outputing it to a file
+export saves and image by outputing it to a file
+export saves and image by outputing it to a file
+export saves and image by outputing it to a file
+export saves and image by outputing it to a file
+export saves and image by outputing it to a file
+export saves and image by outputing it to a file
+
 docker save -o httpd-latest.tar httpd:latest
+docker save -o httpd-latest.tar httpd:latest
+docker save -o httpd-latest.tar httpd:latest
+docker save -o httpd-latest.tar httpd:latest
+docker save -o httpd-latest.tar httpd:latest
+docker save -o httpd-latest.tar httpd:latest
+docker save -o httpd-latest.tar httpd:latest
+
 Import/Load
+docker load -i http.latest.tar
+docker load -i http.latest.tar
+docker load -i http.latest.tar
+docker load -i http.latest.tar
+docker load -i http.latest.tar
+docker load -i http.latest.tar
 docker load -i http.latest.tar
 
 docker node update --availability active
 
-Dockerfile - create a mount point
+REVIEW
+Dockerfile - create a mount point, remember in Dockerfile 
+we only want volumes we can use anywhere so MOUNT on host is bad
+we need docker create VOLUME, and even though in a swarm we get
+the volume files are not on same servers unless your volume is
+like the same S3 bucket
 VOLUME
+
+What is the correct syntax for the "exec" format of the CMD instruction?
+CMD ["executable","param1","param2"]
 
 docker node inspect --pretty NODEID
 
@@ -269,7 +339,32 @@ how to you create a swarm to make it ready for new nodes
 docker swarm init --advertise-addr IPADRESS
 
 --lock a swarm
-docker swarm init --autolock --advertise-add IPADDRESS
+docker swarm init --autolock --advertise-addr IPADDRESS
+docker swarm init --auto-lock --advertise-addr
+docker swarm init --auto-lock --advertise-addr
+docker swarm init --auto-lock --advertise-addr
+docker swarm init --auto-lock --advertise-addr
+docker swarm init --auto-lock --advertise-addr
+docker swarm init --auto-lock --advertise-addr
+docker swarm init --auto-lock --advertise-addr
+
+REVIEW
+Q: Which two ways does a source container make connectivity information available to a linked destination container?
+A: Via environment variables and updates to the /etc/hosts file
+
+Q: What is the default MTU applied to the "docker0" bridge?
+1500 bytes
+
+
+Q:What is the function of the CMD instruction if the ENTRYPOINT instruction is also used?
+A: CMD instructions get interpreted as arguments to ENTRYPOINT
+
+Q:Which 3rd party command line tool is often used to inspect "docker0" bridge config information?
+A: brctl
+
+Q: What happens to files and directories in the same directory as the Dockerfile?
+A: Ignored...  need to use COPY
+
 --ouputs the key which you need to keep
 
 --create a network
@@ -352,14 +447,20 @@ docker network inspect br04
 -- stop a stuck / frozen container
 docker kill myweb
 
+REVIEW
 ****
 -- stop a container 10 seconds after execution of a request
+docker stop -t 10 myweb
+docker stop -t 10 myweb
 docker stop -t 10 myweb
 ****
 
 docker --tag httpd:latest http:old
 
-List processes running in SWARM cluster
+REVIEW
+List processes running in SWARM cluster.
+Processes in a swarm cluster are the SERVICES.
+Processes in a swarm cluster are the SERVICES
 docker service ps SERVICENAME
 
 --list the nodes in a swarm
@@ -385,6 +486,7 @@ docker network create --subnet=[0.0.0.0/16] mynet
 
 docker stop -t 10 myweb
 
+REVIEW
 --change dns
 daemon.json
 {
