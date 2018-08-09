@@ -62,6 +62,8 @@ libcgroup
 docker service create --name myservice --p 80:80 --env MYVAR=CRAIG --workdir /user/home/crap
 docker rm $(docker ps -a -q)
 docker rm `docker ps -a -q`
+
+
 docker network rm mynet
 
 Dockerfile  EXPOSE - containers will listen on the indicated port at lauch.
@@ -143,6 +145,7 @@ docker network create
 
 docker network ls
 
+
 docker swarm leave
 
 docker swarm join-token manager
@@ -180,7 +183,7 @@ docker rmi -f mistake:v1
 docker container inspect CONTAINER | grep $VAR
 docker container inspect CONTAINER | grep IPAddress
 docker container inspect CONTAINER | grep Ports
-docker container inspect --format="{{.NetworkSettings.Networks.[yournetworkdriver].IPaddress}}" CONTAINER
+docker container inspect --format="{{.NetworkSettings.Networks.[yournetworkdriver].IPAddress}}" CONTAINER
 docker container inspect --format="{{.NetworkSettings.Ports}}" CONTAINER
 
 --import a saved image tar file
@@ -271,6 +274,80 @@ docker swarm init --autolock --advertise-add IPADDRESS
 
 --create a network
 docker network create --subnet[RANGE] myNetworkName
+
+docker network create --driver bridge --subnet 10.1.0.0/24 --gateway 10.1.0.1 mybridge01
+[
+    {
+        "Name": "mybridge01",
+        "Id": "c938ecbf8fcd2d938ddff5ff5379d74f14f6307f0e74d82e022be18486b72dc9",
+        "Created": "2018-08-09T12:38:09.7344879Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "10.1.0.0/24",
+                    "Gateway": "10.1.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+using my own network
+this way we could restrict the .4 to say ... node # 4
+docker run -it --name nettest1 --net br04 centos:latest /bin/bash
+
+--static IP assigned
+docker run -it --name nettest2 --net br04 --ip 10.1.4. 100 centos:latest /bin/bash
+
+docker network inspect br04
+[
+    {
+        "Name": "br04",
+        "Id": "4ffc6b3f2d02d5ad1000fb292aa6725847d18a022ee253810b17d265f6435d80",
+        "Created": "2018-08-09T12:59:58.8237428Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "10.1.0.0/16",
+                    "IPRange": "10.1.4.0/24",
+                    "Gateway": "10.1.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {
+            "host4network": ""
+        }
+    }
+]
 
 -- stop a stuck / frozen container
 docker kill myweb
