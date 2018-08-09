@@ -21,6 +21,7 @@ sudo systemctl enable docker && sudo systemctl start docker && sudo systemctl st
 
 # we are using the private ips for this lab only, external requires more work
 # we need to disable the firewall so our docker manager and node can communicate.
+# sometimes you need to do this and sometimes you just need to setup firewalld correctly
 $ sudo systemctl disable firewalld && sudo systemctl stop firewalld
 
 # name the hosts on both 10.0.0.11 and 10.0.0.12 using the private ips
