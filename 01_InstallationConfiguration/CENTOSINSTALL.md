@@ -2,6 +2,20 @@
 
 If anything fails check the references at the bottom of the markdown.
 
+## tl;dr
+
+## CentOS script
+
+```bash
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum update -y
+yum install docker-ce -y
+yum-complete-transaction --cleanup-only
+systemctl enable docker && systemctl start docker && systemctl status docker
+usermod -aG docker $USER
+```
+
 ## Docker File
 
 Docker Built to create our on image.

@@ -157,24 +157,12 @@ Example to setup swarm on two services.  Creating more worker nodes is just a re
 - Exercise: Utilize External DNS With Your Containers
 - Exercise: Create a New Bridge Network and Assign a Container To It
 
-## References
-
-- Installing Docker | https://docs.docker.com/install/
-
 ### Examples
 
 - https://docs.docker.com/compose/aspnet-mssql-compose/
 - https://training.play-with-docker.com/alacart/
 
-## CentOS script
+## References
 
-```bash
-yum install -y yum-utils device-mapper-persistent-data lvm2
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum update -y
-yum install docker-ce -y
-yum-complete-transaction --cleanup-only
-systemctl enable docker && systemctl start docker && systemctl status docker
-usermod -aG docker $USER
-```
-
+- Installing Docker | https://docs.docker.com/install/
+- http://containertutorials.com/volumes/get_started.html
