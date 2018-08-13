@@ -1,30 +1,49 @@
 # Cheetsheet
 
-## Skills for Operations
+## TODO
+
+UCP
+docker compose
+
+## Linking containers
+
+docker pull mysql:latest
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=wordpress -d mysql 89c8554d736862ad5dbb8de5a16e338069ba46f3d7bbda9b8bf491813c842532
+
+docker pull wordpress:latest
+docker run -e WORDPRESS_DB_PASSWORD=password --name wordpress-container --link mysql-container:mysql -p 8080:80 -d wordpress
+189c0f04ce7694b4f9fadd36624f6f818023d8d1f3ed1c56de5a516255f328a9
+
+## Skill-set for Operations when deploying containers
 
 This is a TEAM (6-7 people, minimum of 4 people)  On-call needs min of 4 people.
 
 - Need to understand operations
  -- skeletons are buried
  -- snowflakes
+ -- apps that are brittle
 - Understand deployments
- -- how to weave in containers
+ -- how to weave in containers into the infrastructure
+ -- best fit for the containers (stateless apps)
 - Tooling
- -- what tooling do we need
- -- what do we need to build
+ -- what tooling do we need to push, remove, update
+ -- what do we need to build where tooling does not support
 - Monitoring
  -- what do we want to monitor
+ -- how can we monitor...
+ -- what exists that we can buy
 - Kernal Understanding
  -- kernal crashes
  -- what is going on upstrem
+ -- b/c containers run on the kernal
 - Networking
  -- how to setup it up
- -- what intergrates with us now
+ -- what integrates with us now
  -- what is best for us now
 - Security
- -- understand what is out of the box
- -- standards in the community
- -- needs to enjoy infosec
+ -- understand what is out of the box setup
+ -- standards in the community in containers, or just like OWASP
+ -- Individual needs to enjoy infosec
 - Polictics
  -- Good for Internal Adoption
  -- Manage relationships
@@ -56,23 +75,73 @@ docker --version
 ## Performance or Check
 
 ```bash
-docker top CONTAINERID
+
+# get the running processes on a container
+docker top testweb
+
+PID                 USER                TIME                COMMAND
+79060               root                0:00                nginx: master process nginx -g daemon off;
+79101               101                 0:00                nginx: worker process
+
+#   -a, --all             Show all containers (default shows just running)
+#      --format string   Pretty-print images using a Go template
+#      --no-stream       Disable streaming stats and only pull the first result
+#      --no-trunc        Do not truncate output
 docker stats
 
-#check of diskspace
+CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT     MEM %               NET I/O             BLOCK I/O           PIDS
+b4ab0202e788        testweb             0.00%               1.844MiB / 1.952GiB   0.09%               828B / 0B           0B / 0B             2
+
+# check of diskspace
+docker exec -it testweb /bin/bash
 df -h
+
+Filesystem      Size  Used Avail Use% Mounted on
+overlay          59G  3.9G   52G   7% /
+tmpfs            64M     0   64M   0% /dev
+tmpfs          1000M     0 1000M   0% /sys/fs/cgroup
+/dev/sda1        59G  3.9G   52G   7% /etc/hosts
+shm              64M     0   64M   0% /dev/shm
+tmpfs          1000M     0 1000M   0% /proc/acpi
+tmpfs          1000M     0 1000M   0% /sys/firmware
 ```
 
 ## Events
 
 https://docs.docker.com/engine/reference/commandline/events/
 
+```bash
+
 docker events
 docker events --filter event=die --filter event=stop
 docker events --since '1h'
 
+2018-08-11T15:49:56.625924300-04:00 network connect a244f93b6f39f1f4c14ec3177785f060d98c64707d9244b82ff98daedebe7873 (container=b4ab0202e788815e0d99c39cfa4a139df428cdb3807969e496f3009e2ebc8d22, name=bridge, type=bridge)
+2018-08-11T15:49:57.333300600-04:00 container start b4ab0202e788815e0d99c39cfa4a139df428cdb3807969e496f3009e2ebc8d22 (image=nginx, maintainer=NGINX Docker Maintainers <docker-maint@nginx.com>, name=testweb)
+2018-08-11T15:51:44.193250300-04:00 container top b4ab0202e788815e0d99c39cfa4a139df428cdb3807969e496f3009e2ebc8d22 (image=nginx, maintainer=NGINX Docker Maintainers <docker-maint@nginx.com>, name=testweb)
+2018-08-11T15:52:31.686973300-04:00 container exec_create: /bin/bash  b4ab0202e788815e0d99c39cfa4a139df428cdb3807969e496f3009e2ebc8d22 (execID=0305aa48edf0154a4b036c143ad151e12c4b2de0ee31684e77fa558765eecf55, image=nginx, maintainer=NGINX Docker Maintainers <docker-maint@nginx.com>, name=testweb)
+2018-08-11T15:52:31.695525600-04:00 container exec_start: /bin/bash  b4ab0202e788815e0d99c39cfa4a139df428cdb3807969e496f3009e2ebc8d22 (execID=0305aa48edf0154a4b036c143ad151e12c4b2de0ee31684e77fa558765eecf55, image=nginx, maintainer=NGINX Docker Maintainers <docker-maint@nginx.com>, name=testweb)
+2018-08-11T15:53:17.777760500-04:00 container exec_die b4ab0202e788815e0d99c39cfa4a139df428cdb3807969e496f3009e2ebc8d22 (execID=0305aa48edf0154a4b036c143ad151e12c4b2de0ee31684e77fa558765eecf55, exitCode=0, image=nginx, maintainer=NGINX Docker Maintainers <docker-maint@nginx.com>, name=testweb)
+
 ps aux | grep docker
-docker diff vigilant_engelbart
+
+# show me the cha ged files in a container
+docker diff testweb
+
+C /root
+A /root/.bash_history
+C /run
+A /run/nginx.pid
+C /var
+C /var/cache
+C /var/cache/nginx
+A /var/cache/nginx/client_temp
+A /var/cache/nginx/fastcgi_temp
+A /var/cache/nginx/proxy_temp
+A /var/cache/nginx/scgi_temp
+A /var/cache/nginx/uwsgi_temp
+
+```
 
 ## Docker Architecture
 
@@ -108,9 +177,24 @@ daemon.json
 key.json
 ```
 
+Example daemon.json file with dns and logger settings.
+
+```json
+daemon.json
+{
+  "log-driver" : "syslog",
+  "log-opts" : {
+    "labels" : "production_log",
+    "env" " "os,customer"
+  }
+
+  "dns" : ["8.8.8.8", "8.8.4.4"]
+}
+```
+
 Location of the run files.
 
-docker.sock is what we need permissions to... it's the socket we talke to.
+docker.sock is what we need permissions to... it's the socket our processes need to talk to to run commands.
 
 ```bash
 /etc/var/run/docker.sock
@@ -127,8 +211,7 @@ docker.sock is what we need permissions to... it's the socket we talke to.
 
 ## What is a container
 
-Containers are processes created from tarballs and anchored to namespaces and
-controlled by cgroups.
+Containers are processes created from tarballs and anchored to namespaces and controlled by cgroups.
 
 ### Strenghts
 
@@ -159,38 +242,42 @@ Just use cloud provider.
 
 Determine what a PID (process) can see.
 
-- /data directories.
-- Other processes
+- Data directories. (/data)
+- Other processes (PIDs)
 - Only see's it's on slice of the universe
 
-https://en.wikipedia.org/wiki/Linux_namespaces
+[https://en.wikipedia.org/wiki/Linux_namespaces](wiki)
 
-mount (mnt)
-process id (pid)
-network (net)
-interprocess communication (ipc)
-UTS
-User ID (user)
-Control Group (cgroups)
+- mount (mnt)
+- process id (pid)
+- network (net)
+- interprocess communication (ipc)
+- UTS
+- User ID (user)
+- Control Group (cgroups)
+
+Docker uses namespaces, network and pid for security
 
 ### cgroups
 
-Determin what the PID can use.  5GB Memory, 5 CPU.
+Determin what the PID can **USE**.  5GB Memory, 5 CPU's, etc...
 
-https://en.wikipedia.org/wiki/Cgroups
+[https://en.wikipedia.org/wiki/Cgroups](wiki)
 
-memory - resource limiting
-cpu & IO - prioritzation
-accounting 
-control - freezing of groups of processing, checkpointing and restarrting
-libcgroup
+- memory - resource limiting
+- cpu & IO - prioritzation
+- accounting
+- control - freezing of groups of processing, checkpointing and restarrting
+- libcgroup - ?
 
 ### Remove containers
 
+```bash
 docker rm CONTAINERID
 docker rm NAME
 docker rm $(docker ps -a -q)
 docker rm `docker ps -a -q`
+```
 
 ## Services - docker sevice create
 
@@ -200,13 +287,13 @@ List the current services
 docker service ls
 ```
 
-List the processes for an individual service
+List the **processes** for an individual service.
 
 ```bash
 docker service ps SERVICENAME
 ```
 
-Example Creates
+### Example for docker service create
 
 Typical flags for services.
 
@@ -219,26 +306,27 @@ docker service create
   --workdir
 
 ```bash
-# example with ports
-docker service create --name testweb -p 80:80 httpd
-
 # example service
 docker service create --name myexample nginx
+
+# example with ports
+docker service create --name testweb -p 80:80 httpd
 
 # Create a service with 4 replicats from an image
 docker service create --name myexample --replicas 4 IMAGENAME
 
-# --workdir string                     Working directory inside the container
+# --workdir string Working directory inside the container
 docker service create --name myservice --p 80:80 --env MYVAR=CRAIG --workdir /user/home/crap
 
 # Create a volume to be shared by a cluster.
-docker service create --name testweb -p 80:80 --mount myvolume, target=/insterval-mount --detach=false --replicas 3 httpd
+docker volume create myvolume
+docker service create --name testweb -p 80:80 --mount myvolume, target=/internal-mount --detach=false --replicas 3 httpd
 ```
 
-Scaling a service example.  
+### Scaling a service example
 
 ```bash
---SCALE A SERVICE - YOU CAN's SCALE A SWARM.  SWARM is ALL THE SCALLED SERVICES
+#SCALE A SERVICE - YOU CANNOT SCALE A SWARM.  SWARM is ALL THE SCALLED SERVICES
 docker service scale myservice=5
 docker service scale myservice=5
 docker service scale myservice=5
@@ -249,26 +337,36 @@ docker service scale myservice=5
 docker service scale myservice=5
 ```
 
-Remove a service
+### Remove a service
 
 ```bash
 docker service rm SERVICENAME
 ```
 
-Get the logs of a service
+### Get the logs of a service
 
 ```bash
 docker service logs SERVICENAME
 docker logs --tail 25 SERVICENAME
 ```
 
-Update a service.  This is another way to scale.  Easier to remember the other way.
+### Update a service.  This is another way to scale
 
 ```bash
 docker service update --replicates 3 testweb
 ```
 
+Easier to remember this way:
+
+```bash
+docker service scale testweb=4
+```
+
 Where is this service deployed?  This will give you:
+
+```bash
+docker service ps myexample
+```
 
 - ID
 - Name
@@ -279,25 +377,14 @@ Where is this service deployed?  This will give you:
 - Error
 - Ports
 
-```bash
-docker service ps myexample
-```
-
 Bonus: What performs a docker service create?
 
 - no volume available, when -v or --volume is used
 - --mount[source/path],target=[path] is used
 
-## Network
+## Dockerfile
 
-docker network rm mynet
-
-Dockerfile  EXPOSE - containers will listen on the indicated port at lauch.
-
-docker ps
-docker build -tmyimage:v1' .
-
-docker pull httpd:latest
+EXPOSE - containers will listen on the indicated port at lauch.
 
 RUN - stick your apt-gets and yums here to install packages
 
@@ -332,11 +419,9 @@ daemon.json
 Another way
 
 > docker login --username=$USERNAME
+> docker push new httpd:new
 
-docker push new httpd:new
-
-Run a default command at launch time in a container, that
-can be overidded.
+## Run a default command at launch time in a container, that can be overidded
 
 ENTRYPOINT
 
@@ -344,13 +429,24 @@ docker images
 
 https://docs.docker.com/engine/reference/commandline/tag/
 --remember this pattern, container referenced is last ...
-docker -tag http:new http:old
+
+## Tags
+
+> docker -tag http:newimage http:oldiamge
+
+## Network
+
+### Remove a network
+
+> docker network rm mynet
+
+### Creating a network
 
 docker network create
   --driver=overlay
   --subnet=192.168.0.1/16
   --gateway=192.168.0.1
-  --ip-range=192.168.0.1/16 
+  --ip-range=192.168.0.1/16
     to further subdived the network
      --attachable           Enable manual container attachment
       --aux-address map      Auxiliary IPv4 or IPv6 addresses used by Network driver (default map[])
@@ -369,13 +465,15 @@ docker network create
       --scope string         Control the network's scope
       --subnet strings       Subnet in CIDR format that represents a network segment
 
-docker network ls
+### List all networks
+
+> docker network ls
 
 ## Logging
 
 Show the logs for one container by the container id
 
-Print the logs of the last 25 records in a container
+Print the logs of the last 25 records in a container.
 
 > docker logs --tail 25 myweb_container
 
@@ -390,7 +488,7 @@ Print the logs of the last 25 records in a container
 
 ### docker logs [OPTIONS] CONTAINER
 
-> docker container logs ID | more
+> docker container logs CONTAINER_ID | more
 
 ### Tail the logs for a service
 
@@ -402,32 +500,37 @@ Retrieve logs until a specific point in time
 
 > docker service logs SERVICENAME
 
-## If your swarm manager has lost majority you need to force a new cluster
+## Swarm: If your swarm manager has lost majority you need to force a new cluster
 
 > docker swarm init --force-new-cluster --advertise-addre IPADDRESS
 
-## Re-init swarm to keep it from connecting to old nodes
+## Swarm: Re-init swarm to keep it from connecting to old nodes
 
-docker swarm init --force-new-cluster
-docker swarm init --force-new-cluster
-docker swarm init --force-new-cluster
-docker swarm init --force-new-cluster
-docker swarm init --force-new-cluster
-docker swarm init --force-new-cluster
-docker swarm init --force-new-cluster
+You only need to call this once, I typed it out many times to memorize the command.
 
 Rebuild a swarm so it does not connect to old nodes
 
-## Promote Worker to Manager in a Swarm
+```bash
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+docker swarm init --force-new-cluster
+```
+
+## Swarm: Promote Worker to Manager
 
 ```bash
 # make a worker node also a manager in a swarm
+# run this on the current manager
 docker node promote NODEID
 
 docker run -d --name myweb httpd:latest
 
--- commands to remove image even if
--- containers are based on the container
+# commands to remove image even if
+# containers are based on the container
 docker rmi -f mistake:v1
 
 docker container inspect CONTAINER | grep $VAR
@@ -444,7 +547,7 @@ docker container inspect --format="{{.NetworkSettings.Ports}}" CONTAINER
 ## Registry Stuff
 
 > docker pull registry
-Runs on port 5000, uses TLS to help u setup private registry
+Runs on port 5000, uses TLS to help you setup private registry
 
 ## Remove a Node from cluster
 
@@ -459,9 +562,8 @@ It's a node
 > docker node update --availability drain NODEID
 > docker node update --availability active NODEID
 
-- draining... a cluster node to prevent services
-- from running on it in the future
-- when we are geting ready to remove the node
+- draining... a cluster node to prevent services running on that node
+- do this when we are geting ready to remove the node
 
 > docker node update --availability drain NODEID
 from the manager
@@ -472,20 +574,14 @@ from the manager
 
 do this from the manager
 
-## Which package should be installed to manage the Docker0 interface?
+## Which package should be installed to manage the Docker0 interface
 
 REVIEW
 
 - UBUNTU bridge-utils
 - Centos we use net-utils...
 
-## Export an image to a tar file
-
-A tar archive containing all image layers and tags
-
-> docker save -o http-latest.tar httpd:latest
-
-## Information about global service.
+## Information about global service
 
 REVIEW
 
@@ -494,22 +590,21 @@ REVIEW
 
 command to create/init one replica
 
-docker swarm create --name --replica 1
+> docker swarm create --name --replica 1
+> docker exec -it IMAGENAME \bin\bash
 
-docker exec -it IMAGENAME \bin\bash
+Login with specific username
+> docker login --username=COMPANY_ACCOUNT
 
---login with specific username
-docker login --username=COMPANY_ACCOUNT
+## Export (save) an image to a tar file
 
-## Export/Save Images
+A tar archive containing all image layers and tags
 
-export saves and image by outputing it to a file
-export saves and image by outputing it to a file
-export saves and image by outputing it to a file
-export saves and image by outputing it to a file
-export saves and image by outputing it to a file
-export saves and image by outputing it to a file
-export saves and image by outputing it to a file
+> docker save -o http-latest.tar httpd:latest
+
+Remember save -o --outputs **outputs** to a file.  We need to to give it a -o or --output and a file name with the image.
+
+Export saves and image by outputing it to a file.  SAVE OUT. LOAD IN.
 
 Export or Save the Image
 
@@ -523,7 +618,9 @@ docker save -o httpd-latest.tar httpd:latest
 docker save -o httpd-latest.tar httpd:latest
 ```
 
-Import/Load
+## Import/Load
+
+Import loads a file from an **input** string -i --input.  SAVE OUT LOAD IN.
 
 ```bash
 docker load -i http.latest.tar
@@ -535,28 +632,32 @@ docker load -i http.latest.tar
 docker load -i http.latest.tar
 ```
 
+## Dockerfiles
+
 REVIEW
 
-Dockerfile - create a mount point, remember in Dockerfile we only want volumes we can use anywhere so MOUNT on host is bad we need docker create VOLUME, and even though in a swarm we get the volume files are not on same servers unless your volume is like the same S3 bucket.
+Create a mount point, remember in Dockerfile we only want volumes we can use anywhere so MOUNT on host is bad we need docker create VOLUME, and even though in a swarm we get the volume files are not on same servers unless your volume is like the same S3 bucket.
 
 VOLUME
 
 What is the correct syntax for the "exec" format of the CMD instruction?
 CMD ["executable","param1","param2"]
 
-docker node inspect --pretty NODEID
+## Inspect a node
+
+> docker node inspect --pretty NODEID
 
 ## Swarm
 
 How to you create a swarm to make it ready for new nodes
 
 > docker swarm init
-> docker swarm init --advertise-addr IPADRESS
+> docker swarm init --advertise-addr IPADDRESS
 
 Lock a swarm
 
 ```bash
-docker swarm init --autolock --advertise-addr IPADDRESS
+docker swarm init --auto-lock --advertise-addr IPADDRESS
 docker swarm init --auto-lock --advertise-addr
 docker swarm init --auto-lock --advertise-addr
 docker swarm init --auto-lock --advertise-addr
@@ -586,7 +687,7 @@ List all running swarms (WRONG OR RIGHT?)
 
 ### Initialize a swarm with autolocking enabled
 
-> docker swarm intit auto-lock --advertise-addr IPADDRESS
+> docker swarm init auto-lock --advertise-addr IPADDRESS
 
 Swarm initialized: current node (k1q27tfyx9rncpixhk69sa61v) is now a manager.
 
@@ -617,7 +718,12 @@ GRACEFULLY
 > docker swarm leave
 > docker swarm join-token manager
 
-## Lock Swarm that's already running
+### Drain a node, and then bring node back online in a swarm
+
+> docker node update --availability drain NODEID
+> docker node update --availability active NODEID
+
+## Lock Swarm that's already running with 'docker swarm update'
 
 > docker swarm update --autolock=true
 
@@ -669,23 +775,27 @@ REVIEW
 Q: Which two ways does a source container make connectivity information available to a linked destination container?
 A: Via environment variables and updates to the /etc/hosts file
 
+Remember linked is old and uses env.
+
 Q: What is the default MTU applied to the "docker0" bridge?
 1500 bytes
 
 Q:What is the function of the CMD instruction if the ENTRYPOINT instruction is also used?
 A: CMD instructions get interpreted as arguments to ENTRYPOINT
 
+CMD ["echo","this reality","cd /","ls -al"]
+
 Q:Which 3rd party command line tool is often used to inspect "docker0" bridge config information?
 A: brctl
 
 Q: What happens to files and directories in the same directory as the Dockerfile?
-A: Ignored...  need to use COPY
+A: Ignored...  need to use COPY to be added to the image.
 
 ## Docker Networks
 
-> docker network create --subnet[RANGE] myNetworkName
-
+> docker network create --subnet[RANGE/24] myNetworkName
 > docker network create --driver bridge --subnet 10.1.0.0/24 --gateway 10.1.0.1 mybridge01
+> docker network inpect
 
 ```json
 [
@@ -727,7 +837,7 @@ When using my own network this way we could restrict the .4 to say ... node # 4
 
 Static IP assigned
 
-> docker run -it --name nettest2 --net br04 --ip 10.1.4. 100 centos:latest /bin/bash
+> docker run -it --name nettest2 --net br04 --ip 10.1.4.100 centos:latest /bin/bash
 
 Review
 
@@ -786,6 +896,7 @@ docker stop -t 10 myweb
 ## Taging
 
 > docker --tag httpd:latest http:old
+> docker --tag httpd:new_image http:old_image
 
 REVIEW
 
@@ -793,7 +904,8 @@ List the services
 
 > docker service ls
 
-List this processes running in SWARM cluster.
+List this processes running in SWARM cluster.  Process is PID.
+PID runs are node.  PIDs exist because they are a service which is a continer.
 
 > docker service ps SERVICENAME
 
@@ -846,13 +958,27 @@ docker info
 
 --privledged
 
---save an image after we make additional changes to it.
+## Commit an container
+
+When changes are made to a Docker image and are ready to be made available for containers to be instantiated on, which of the following commands would make that new image available, called 'httpd:v2'?
+
+```bash
 docker commit -m "Notes made here" myweb httpd:v2
 
---which is correct???
+# create new image from a container you have stopped.
+# need to test if this works on running containers
+# Yup works on running containers too...
+docker commit changed_container newcontainer:v1
+```
+
+The 'docker commit' command is used to take a container's build and commit it to the indicated image name.
+
+## Volumes
+
+These are the same command.
+
 docker run -d --name myweb -v /local/dir:/my/data/volume httpd:latest
 docker run -d --name myweb --volumes /local/dir:/my/data/volume httpd:latest
-_NIETHER>>>>
 
 You need to launch a detached web container based on the 'httpd' image on your system. That container should bind to a host directory called /my/webfiles to the /usr/local/apache2/htdocs directory on the container, to serve content from. Which of the following container instantiation commands would accomplish that goal?
 
@@ -867,9 +993,10 @@ You have received a 'docker inspect' report that
 Correct answer
 --format="{{.Structure.To.Review}}" [objectid/name]
 
-If you want an instantiated container named 'myweb' to have a path inside of it called '/my/data/volume', which command would accomplish this?
+## If you want an instantiated container named 'myweb' to have a path inside of it called '/my/data/volume', which command would accomplish this?
 
 Which of the following commands will recreate the Dockerfile from an existing image?
+
 NONE OF THE ABOVE
 
 You need a container running Apache to be launched from an image called 'http:latest'. 
@@ -945,6 +1072,7 @@ docker run -d -p 80:80 haproxy
     We will use CentOS for this course
 
 ## Selecting a Storage Driver
+
     Storage Drivers - for volumes???
     depending on docker-ce or docker-ee and which OS the storage driver picked will allow for efficeinties
     CentOS Support - DeviceMapper
@@ -1818,13 +1946,19 @@ Everything needs to be backed up
 - Back up your created images you have edited in case they get deleted by accident
 - Back up your created images if they are not published to registry
 - Back up your create images off site
+- Create an image from a stopped container (docker ps -a)
 
 ```bash
+# create new image from a container you have stopped.
+# need to test if this works on running containers
+# Yup works on running containers too...
 docker commit changed_container newcontainer:v1
-docker save -o centos.latest.tar centos:latest 
+
+
+docker save -o centos.latest.tar centos:latest
 docker save --output centos.latest.tar centos:latest
 
-#you can save a container if you want to remove it from 
+#you can save a container if you want to remove it from
 # docker images
 # tar tvf centos.latest.tar
 # zips up the /var/lib/docker dir for that container
