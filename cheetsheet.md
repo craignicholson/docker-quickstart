@@ -2034,9 +2034,14 @@ HARD TO FORGET TEST QUESTIONS
     docker port CONTAINER
     docker container inspect CONTAINER
 
+    not docker port inspect CONTAINER
+
 1. Question about Quorum and when we have 3 availability zones
 
   and with managers in each, when a quorum goes in non-voting stats
+  
+  review the chart...
+
   4,1,1 or 4,2,1
   idk
 
@@ -2136,3 +2141,9 @@ COPY
 
 The COPY instruction copies new files or directories from <src> and adds them to the filesystem of the container at the path <dest>.
 
+1. What's the thing with
+
+import/export
+load/save
+
+1. Ignore TLS during docker run and other places for DOCKER_CERTIFICATE_TRUST= false
