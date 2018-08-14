@@ -2147,3 +2147,7 @@ import/export
 load/save
 
 1. Ignore TLS during docker run and other places for DOCKER_CERTIFICATE_TRUST= false
+
+1. secrets was on the test
+
+1. there was template question of some type... 

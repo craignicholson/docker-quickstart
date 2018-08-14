@@ -1,0 +1,1 @@
+use 3 availability zones.   

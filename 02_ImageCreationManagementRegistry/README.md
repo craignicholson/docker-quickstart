@@ -124,7 +124,7 @@ docker rmi centos:6
 
 ```
 
-## Use CLI Commands to Manage Images (List, Delete, Prune, RMI, etc)
+## Use CLI Commands to Manage Images (list, delete, prune, rmi, etc)
 
 Managing our local images goes beyond what we have seen so far in the 'docker images' command. We have the ability to back up, restore, list, remote, pull, push, and otherwise inspect the details of any image. We will show you how in this lesson.
 
@@ -181,9 +181,13 @@ docker images
 docker image ls
 
 # prune, remove dangling images where they are not associated with a contianer
+#  --all (-a)
+#  --force (-f)
+#  --volumes, unsued volumes
 docker image prune
 # remove all images that have never been used to create a container
-docker image prune -a
+docker image prune --all
+docker image prune -a --volumes
 
 # pull, pulls from docker hub
 docker pull image:v1
@@ -1197,4 +1201,42 @@ sudo systemctl restart docker
 docker ps
 CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
 cc48f68d25db        httpd               "httpd-foreground"   2 minutes ago       Up 3 seconds        80/tcp              testweb
+```
+
+## Tag an Image as our own
+
+```bash
+docker tag ubuntu:latest my:ubuntu
+```
+
+## Creating a New Image from a Container
+
+```bash
+# run centos interactive and install stuff and then save the container as a new image
+docker run -it centos:6 /bin/bash
+yum -y update (or yum -y upgrade)
+yum install httpd
+yum install telnet
+exit
+
+
+docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                   PORTS               NAMES
+b237d65fd197        centos:latest       "/bin/bash"         2 minutes ago       Exited (0) 2 minutes ago                       angry_albert
+
+docker commit b237d65fd197 newcentos:withapache
+```
+
+## Managing Containers (Creating, Starting and Stopping)
+
+```bash
+sudo docker pull ubuntu:latest
+sudo docker ps -a
+sudo docker stop jovial_kilby
+sudo docker rm jovial_kilby
+
+
+sudo docker create -it --name="my-container" ubuntu:latest /bin/bash
+sudo docker start my-container
+sudo docker attach my-container
 ```
