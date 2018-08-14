@@ -577,9 +577,9 @@ verify: Service converged
 # verify
 docker service ps testweb
 ID                  NAME                IMAGE               NODE                                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
-rknebt32yrrp        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 10 minutes ago                       
-4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 46 seconds ago                       
-v0bftuvcpuwz        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 27 seconds ago    
+rknebt32yrrp        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 10 minutes ago
+4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 46 seconds ago
+v0bftuvcpuwz        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 27 seconds ago
 ```
 
 Also, this might take some time, so we can run this in detached mode and watch the cluster build.
@@ -604,16 +604,16 @@ verify: Service converged
 # verify
 docker service ps testweb
 ID                  NAME                IMAGE               NODE                                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
-rknebt32yrrp        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 12 minutes ago                       
-4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 3 minutes ago                        
-v0bftuvcpuwz        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 3 minutes ago                        
-uyqen7713trh        testweb.4           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 41 seconds ago                       
-v1zuthiunar4        testweb.5           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 43 seconds ago                       
-s4q0anna8aco        testweb.6           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 43 seconds ago                       
-7l0f85cw43dq        testweb.7           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 39 seconds ago                       
-nmfj9syc2gt8        testweb.8           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 43 seconds ago                       
-pff5bn0znuw8        testweb.9           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 43 seconds ago                       
-48y1a8nyenxy        testweb.10          httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 39 seconds ago    
+rknebt32yrrp        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 12 minutes ago
+4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 3 minutes ago
+v0bftuvcpuwz        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 3 minutes ago
+uyqen7713trh        testweb.4           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 41 seconds ago
+v1zuthiunar4        testweb.5           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 43 seconds ago
+s4q0anna8aco        testweb.6           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 43 seconds ago
+7l0f85cw43dq        testweb.7           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 39 seconds ago
+nmfj9syc2gt8        testweb.8           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 43 seconds ago
+pff5bn0znuw8        testweb.9           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 43 seconds ago
+48y1a8nyenxy        testweb.10          httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 39 seconds ago
 
 ```
 
@@ -633,8 +633,8 @@ verify: Service converged
 # verify
 $ docker service ps testweb
 ID                  NAME                IMAGE               NODE                                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
-rknebt32yrrp        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 14 minutes ago                       
-4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 4 minutes ago                        
+rknebt32yrrp        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 14 minutes ago
+4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 4 minutes ago
 v0bftuvcpuwz        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 4 minutes ago 
 ```
 
@@ -672,11 +672,11 @@ verify: Service converged
 # verify
 docker service ps testweb
 ID                  NAME                IMAGE               NODE                                    DESIRED STATE       CURRENT STATE             ERROR               PORTS
-rdb2l5kwanvn        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 17 seconds ago                        
-rknebt32yrrp         \_ testweb.1       httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Shutdown            Shutdown 18 seconds ago                       
-i6jtjt77ch7e        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 21 seconds ago                        
-4ufcyzedfqdp         \_ testweb.2       httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Shutdown            Shutdown 22 seconds ago                       
-vuxhfc2aa2dp        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 12 seconds ago                        
+rdb2l5kwanvn        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 17 seconds ago
+rknebt32yrrp         \_ testweb.1       httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Shutdown            Shutdown 18 seconds ago
+i6jtjt77ch7e        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 21 seconds ago
+4ufcyzedfqdp         \_ testweb.2       httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Shutdown            Shutdown 22 seconds ago
+vuxhfc2aa2dp        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 12 seconds ago
 v0bftuvcpuwz         \_ testweb.3       httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Shutdown            Shutdown 13 seconds ago
 
 # another example
@@ -736,9 +736,9 @@ docker service update --replicas 3 --detach=false testweb
 
 docker service ps testweb
 ID                  NAME                IMAGE               NODE                                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
-rdb2l5kwanvn        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 8 minutes ago                        
-rknebt32yrrp         \_ testweb.1       httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Shutdown            Shutdown 8 minutes ago                       
-4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Shutdown            Shutdown 8 minutes ago                       
+rdb2l5kwanvn        testweb.1           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 8 minutes ago
+rknebt32yrrp         \_ testweb.1       httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Shutdown            Shutdown 8 minutes ago
+4ufcyzedfqdp        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Shutdown            Shutdown 8 minutes ago
 v0bftuvcpuwz        testweb.3           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Shutdown            Shutdown 8 minutes ago
 
 ```
@@ -808,26 +808,26 @@ I control the number of instances (replicas) running across the cluster
 docker service create --name testweb -p 80:80 httpd 
 lc1p4pc3mkk5rxd4l2vc0aa3q
 overall progress: 1 out of 1 tasks 
-1/1: running   [==================================================>] 
+1/1: running   [==================================================>]
 verify: Service converged 
 
 docker service ps testweb
 ID                  NAME                IMAGE               NODE                                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
-l5fjgjudk0ce        testweb.1           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 15 seconds ago                       
+l5fjgjudk0ce        testweb.1           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 15 seconds ago
 
 docker service scale testweb=3
 testweb scaled to 3
 overall progress: 3 out of 3 tasks 
-1/3: running   [==================================================>] 
-2/3: running   [==================================================>] 
-3/3: running   [==================================================>] 
+1/3: running   [==================================================>]
+2/3: running   [==================================================>]
+3/3: running   [==================================================>]
 verify: Service converged 
 
 docker service ps testweb
 ID                  NAME                IMAGE               NODE                                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
-l5fjgjudk0ce        testweb.1           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 46 seconds ago                       
-pzvjg482ytnz        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 12 seconds ago                       
-jbklj9qn102g        testweb.3           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 12 seconds ago                       
+l5fjgjudk0ce        testweb.1           httpd:latest        craig-nicholsoneswlb2.mylabserver.com   Running             Running 46 seconds ago
+pzvjg482ytnz        testweb.2           httpd:latest        craig-nicholsoneswlb3.mylabserver.com   Running             Running 12 seconds ago
+jbklj9qn102g        testweb.3           httpd:latest        craig-nicholsoneswlb1.mylabserver.com   Running             Running 12 seconds ago `
 
 docker service ls
 ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
@@ -846,7 +846,7 @@ to add more than one worker per node.
 ```bash
 docker service create --name testnginx -p 5901:8080 --mode global --detach=false nginx
 8a73r5sy93bjqsh8aa2el3af2
-overall progress: 3 out of 3 tasks 
+overall progress: 3 out of 3 tasks
 ceddzblkaexl: running   [==================================================>]
 484tof81jhor: running   [==================================================>]
 2t4xy1mtev3s: running   [==================================================>]
@@ -2098,21 +2098,146 @@ Requirements/Considerations
 ## Create a Swarm Cluster
 
 ```bash
+# main host server one
+docker swarm init --advertise-addr 10.0.1.2
+Swarm initialized: current node (31uejwo9gyiklfry3htehj65h) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join \
+    --token SWMTKN-1-2kl42kf4xeb1t08vcvwqekovknbmw68ny5o01rpyoepmvkrwtv-8q0chh9moe4hs4v6g8ogewmgv \
+    172.31.118.144:2377
+
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+```
+
+Add a worker node on 10.0.1.3
+
+```bash
+    docker swarm join \
+    --token SWMTKN-1-2kl42kf4xeb1t08vcvwqekovknbmw68ny5o01rpyoepmvkrwtv-8q0chh9moe4hs4v6g8ogewmgv \
+    172.31.118.144:2377
+```
+
+Add a worker node on 10.0.1.4
+
+```bash
+    docker swarm join \
+    --token SWMTKN-1-2kl42kf4xeb1t08vcvwqekovknbmw68ny5o01rpyoepmvkrwtv-8q0chh9moe4hs4v6g8ogewmgv \
+    172.31.118.144:2377
 ```
 
 ## Start a Service and Scale it within your swarm
 
 ```bash
+# check if swarm is up
+docker node ls
+
+# create a service, which deploys one replica
+docker service create --name devweb p 80:80 httpd
+```
+
+```bash
+# review the service and see if replicas are up
+sudo docker service ls
+ID            NAME    REPLICAS  IMAGE  COMMAND
+0zad69e49ghj  devweb  1/1       httpd
+
+#Excute a command to tell you where the node is running
+docker service ps devweb
+ID                         NAME      IMAGE  NODE                   DESIRED STATE  CURRENT STATE           ERROR
+377vxg5ay18p38ow3clq32syp  devweb.1  httpd  tcox2.mylabserver.com  Running        Running 5 minutes ago
+
+```
+
+Scale the service up
+
+```bash
+sudo docker service scale devweb=3
+devweb scaled to 3
+```
+
+```bash
+sudo docker service ps devweb
+ID                         NAME      IMAGE  NODE                   DESIRED STATE  CURRENT STATE           ERROR
+377vxg5ay18p38ow3clq32syp  devweb.1  httpd  tcox2.mylabserver.com  Running        Running 7 minutes ago   
+52m31m8u611ip4ncgp07so3nj  devweb.2  httpd  node1.mylabserver.com  Running        Running 33 seconds ago  
+enzhtf6e6htgwemwvj3o8gcdz  devweb.3  httpd  tcox3.mylabserver.com  Running        Running 32 seconds ago
 ```
 
 ## Demonstarte how failure affects service replicas in a swarm
 
 ```bash
+docker pull httpd
+
+# create a service with 3 replicas named testweb with port 80 open on localhost
+docker service create --name testweb -p 80:80 --replicas 3 httpd
+xeyuhxsv2j5uyt9rsv3uj3ue9
+
+# verify service is running
+docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+xeyuhxsv2j5u        testweb             replicated          3/3                 httpd:latest        *:80->80/tcp
+
+# ist the all nodes and verify replicas are running on all three
+docker service ps testweb
+ID                  NAME                IMAGE               NODE                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
+qfbrk9v1tl4l        testweb.1           httpd:latest        node1.mylabserver.com   Running             Running 59 seconds ago
+omuirsvknr6m        testweb.2           httpd:latest        node2.mylabserver.com   Running             Running 28 seconds ago
+0fey7m5i4dkd        testweb.3           httpd:latest        node3.mylabserver.com   Running             Running 58 seconds ago
+
+# stop docker on just the 3rd node
+sudo systemctl stop docker
+[sudo] password for user:
+
+# verify service is still up
+docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+xeyuhxsv2j5u        testweb             replicated          3/3                 httpd:latest        *:80->80/tcp
+
+# verify we still have 3 replicas, not how the node 3 is not up and testweb2 is now on node1
+docker service ps testweb
+ID                  NAME                IMAGE               NODE                    DESIRED STATE       CURRENT STATE            ERROR               PORTS
+qfbrk9v1tl4l        testweb.1           httpd:latest        node1.mylabserver.com   Running             Running 25 minutes ago
+omuirsvknr6m        testweb.2           httpd:latest        node2.mylabserver.com   Running             Running 24 minutes ago
+knhltztskrpv        testweb.3           httpd:latest        node1.mylabserver.com   Running             Running 28 seconds ago
+0fey7m5i4dkd         \_ testweb.3       httpd:latest        node3.mylabserver.com   Shutdown            Running 48 seconds ago  
+
 ```
 
 ## Re-assign a swarm worker to a manager
 
 ```bash
+# On ONE of the worker nodes, force the node to leave the swarm
+docker swarm leave
+Node left the swarm.
+
+# verify, see the status of Down for node2
+docker node ls
+ID                            HOSTNAME                STATUS              AVAILABILITY        MANAGER STATUS
+q413g1p0qr2dtclbcz7v0kevb *   node1.mylabserver.com   Ready               Active              Leader
+q5jptu0fqam87s2jb1wmunzug     node2.mylabserver.com   Ready               Active
+4ucfai1vty001mjca2pxnmvig     node3.mylabserver.com   Down                Activ
+
+#  Find the command and token on the manager node to allow other managers to join the swarm
+docker swarm join-token manager
+To add a manager to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-4j26zpgz4zajn9k1ivvwk337fhn1dru9jswk83gxe956q192km-3hsamjxspn0hgctzfv7sfae1i 172.31.24.209:2377
+
+# Execute the command in the previous step so that your swarm will have an additional manager node
+docker swarm join --token SWMTKN-1-4j26zpgz4zajn9k1ivvwk337fhn1dru9jswk83gxe956q192km-3hsamjxspn0hgctzfv7sfae1i 172.31.24.209:2377
+This node joined a swarm as a manager.
+
+# Verify the node has been promoted to manager and is reporting as such in the cluster information
+docker node ls
+ID                            HOSTNAME                STATUS              AVAILABILITY        MANAGER STATUS
+q413g1p0qr2dtclbcz7v0kevb *   node1.mylabserver.com   Ready               Active              Leader
+q5jptu0fqam87s2jb1wmunzug     node2.mylabserver.com   Ready               Active
+4ucfai1vty001mjca2pxnmvig     node3.mylabserver.com   Down                Active
+68qi7ik7hvhk7josnzp31kyex     node3.mylabserver.com   Ready               Active              Reachable
+
 ```
 
 ## Configure a swarm and scale ervices within a swarm for 3 servers
