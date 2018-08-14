@@ -30,7 +30,7 @@ RUN yum update -y && \
 # Difference between an Array and String Based CMD
 # Shell form sounds better in theory, but it can mess with signal processing. 
 # It also means the shell process ends up being PID 1 instead of whatever binary you’re running in your CMD.
-CMD echo "remember to check your container IP address"
+CMD ["echo","remember to check your container IP address"]
 
 # Create env var for our use
 ENV ENVIRONMENT="production"

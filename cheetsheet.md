@@ -7,12 +7,18 @@ docker compose
 
 ## Linking containers
 
+Legacy... Skip this.
+
+```bash
 docker pull mysql:latest
-docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=wordpress -d mysql 89c8554d736862ad5dbb8de5a16e338069ba46f3d7bbda9b8bf491813c842532
+docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=wordpress -d mysql 89c8554d736862ad5dbb8de5a16e338069ba46f3d7bbda9b8bf491813c842532
 
 docker pull wordpress:latest
 docker run -e WORDPRESS_DB_PASSWORD=password --name wordpress-container --link mysql-container:mysql -p 8080:80 -d wordpress
 189c0f04ce7694b4f9fadd36624f6f818023d8d1f3ed1c56de5a516255f328a9
+
+
+```
 
 ## Skill-set for Operations when deploying containers
 
@@ -2001,3 +2007,132 @@ docker tag OLD NEW
 ## References
 
 https://www.youtube.com/watch?v=sJx_emIiABk
+
+-- 
+
+Questions from test
+
+What namespace is not setup by default in Docker.
+
+what runs and listent to all containers...
+
+docker system events | docker events???
+docker system df
+docker system events
+docker system info
+docker system prune
+
+  df          Show docker disk usage
+  events      Get real time events from the server
+  info        Display system-wide information
+  prune       Remove unused data
+
+HARD TO FORGET TEST QUESTIONS
+
+1. question about correct commands
+
+    docker port CONTAINER
+    docker container inspect CONTAINER
+
+1. Question about Quorum and when we have 3 availability zones
+
+  and with managers in each, when a quorum goes in non-voting stats
+  4,1,1 or 4,2,1
+  idk
+
+1. 2 containers, 4 cpus.
+
+assign each container 2 cpus - on run of the containers
+
+1. what's the point of docker layers?
+
+paralized the docker builds?
+or keep the images cached so rebuilds are quick...
+
+1. DTR - i lost it
+
+https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network
+
+
+1. docker network create --opt encrypted --driver overlay --attachable my-attachable-multi-host-network
+
+encrypt and overlay network connection (let's hack this or MITM it
+
+1. sudo docker run -p 53160:53160 -p 53160:53160/udp -p 58846:58846 -p 8112:8112 -t -i aostanin/deluge /start.sh
+
+send data over udp
+-p 53:53/udp
+
+1. Something about what does not get backed up in UCP, or DTR???
+
+blobs
+meta data
+something
+something
+
+1. question about setting user with list privliedges
+
+Choose two
+
+- add them to docker group
+- ?
+- ?
+- ?
+
+1. Qustions on labels and limits too...
+
+1. CPU
+
+--cpuset-cpus
+Limit the specific CPUs or cores a container can use. A comma-separated list or hyphen-separated range of CPUs a container can use, if you have more than one CPU. The first CPU is numbered 0. A valid value might be 0-3 (to use the first, second, third, and fourth CPU) or 1,3 (to use the second and fourth CPU).
+
+docker run -it --cpus=".5" ubuntu /bin/bash
+
+1. The following example starts a Redis container and configures it to always restart unless it is explicitly stopped or Docker is restarted.
+
+docker run -dit --restart unless-stopped redis
+
+If you manually stop a container, its restart policy is ignored until the Docker daemon restarts or the container is manually restarted. This is another attempt to prevent a restart loop.
+
+Restart policies only apply to containers. Restart policies for swarm services are configured differently. See the flags related to service restart.
+
+1. question about trust that was different than what I had seen or forgotten.
+
+1. something about HEALTHCHECK CMD  http://localhost/health : exit 1
+
+https://docs.docker.com/engine/reference/builder/#healthcheck
+
+HEALTHCHECK CMD curl --fail http://localhost || exit 1
+https://blog.sixeyed.com/docker-healthchecks-why-not-to-use-curl-or-iwr/
+
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl -f http://localhost/ || exit 1
+
+1. WORKDIR in Docker file, what is shown when we use 'pwd'
+
+WORKDIR /a
+WORKDIR b
+WORKDIR c
+
+I mean.. HELL - READ ALL THE DOCS NEXT TIME
+
+The WORKDIR instruction can be used multiple times in a Dockerfile. If a relative path is provided, it will be relative to the path of the previous WORKDIR instruction. For example:
+
+WORKDIR /a
+WORKDIR b
+WORKDIR c
+RUN pwd
+The output of the final pwd command in this Dockerfile would be /a/b/c.
+
+1. something about ADD Vs COPY in a Dockerfile
+
+The ADD instruction copies new files, directories or remote file URLs from <src> and adds them to the filesystem of the image at the path <dest>.
+
+Multiple <src> resources may be specified but if they are files or directories, their paths are interpreted as relative to the source of the context of the build.
+
+Each <src> may contain wildcards and matching will be done using Go’s filepath.Match rules. For example:
+
+COPY
+
+The COPY instruction copies new files or directories from <src> and adds them to the filesystem of the container at the path <dest>.
+
