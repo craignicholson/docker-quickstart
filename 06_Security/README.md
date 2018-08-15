@@ -188,14 +188,16 @@ Review it on hub.docker.  Note the security scan did not show on the web site fo
 
 ## Identity Roles
 
-Making sure we understand the concept of roles in UCP will determine our ability to apply them in RBAC. This lesson will help define what roles have what types of permissions.
+Making sure we understand the concept of roles in UCP (Universal Control Plane) will determine our ability to apply them in RBAC.
+
+This lesson will help define what roles have what types of permissions.
 
 With the Universal Control Plane, Docker has two types of users:
 
 - Adminstrators - can make changes to the UCP swarm
 - Regular Users - have permissions to full control to no access to any number of resources.
 
-Within the UCP, only users that are dsignated as 'administrators' can make changes to the swarms.
+Within the Universal Control Plane, only users that are designated as 'administrators' can make changes to the swarms.
 
 - User Management
 - Organization Management
@@ -205,29 +207,124 @@ Within the UCP, only users that are dsignated as 'administrators' can make chang
 Role consist of one or more permissions granted on a collection that is assigned to a
 user, organization, and/or team by using grants.
 
-Built-In Role | Description
-NONE | No access to swarm resources
-VIEW ONLY | user can VIEW resources (services, volumes, networks) but cannot create/delete/modiy them.
-RESTRICTED CONTROL | grans the ability to view and edit volumes, networks, images but cannot run
-services or containers on the running node.  restricts ability to mount a node directly or 'exec' into running ontainers.
-SCHEDULER | allowed to view nodes and schedule workloads. need additional resource permissions
-, like container view to perform other tasks
-FULL CONTROL | user allowed to view and edit network, images, volumes as well as create containers and services withour restrition. 
-They CANNOT see other users containers and services.
+|Built-In Role | Description |
+|--------------|-------------|
+|NONE | No access to swarm resources. |
+|VIEW ONLY | User can VIEW resources (services, volumes, networks) but cannot create/delete/modiy them.|
+|RESTRICTED CONTROL | Grants the ability to view and edit volumes, networks, images but cannot run.|
+|services or containers on the running node.  restricts ability to mount a node directly or 'exec' into running containers.|
+|SCHEDULER | Allowed to view nodes and schedule workloads. Need additional resource permissions, like container view to perform other tasks.|
+|FULL CONTROL | User allowed to view and edit network, images, volumes as well as create containers and services without restrition. They CANNOT see other users containers and services.|
 
-## Configure RBAC and Enable LDAP in UCP
+[Role Based Access Control](rbac.png)
+
+> SCHEDULER is only one with NODE permissions
+
+## Configure RBAC (Role Based Access Control) and Enable LDAP in UCP
+
+Maybe rewatch before the test: https://linuxacademy.com/cp/courses/lesson/course/1378/lesson/4/module/150
 
 Requires EE - https://docs.docker.com/ee/
 
 Enabling LDAP for authentication allows you to integrate with your user management and authorization solution. Applying roles to your users and teams allow you to control the part they play in your cluster management and utilization implementation.
 
-Lots of UI stuff which is in the EE application and not in CE.
+[Dashboard](dashboard.png)
+
+[LDAP](ldap.png)
+
+### Setting up RBAC
+
+#### Create Role
+
+[Create Role](ceate_role.png)
+
+Custom Role we choose the following specific Container Operations
+
+- Attach
+- Connect
+- Exev
+- Export
+- Logs
+- Stats
+- Top
+- View
+
+#### Create Grant
+
+Grant applies those roles to folks who log in, and are memebers of the Group QA-ContainerTesters automatically.
 
 ## Demonstrate Creation and Use of UCP Client Bundles and Protect the Docker Daemon With Certificates
 
-UCP Client Bundles allow you to provide a preconfigured setup for user accounts set up in UCP, along with the necessary trusted certificates to connect to and use the UCP cluster. You can then control what that user can do by granting roles to the account in UCP; we will show you how to accomplish all of that.
+> Bundles are specific for the UCP and user.  Gives the user a one click way to get up and running with DTR and the UCP where they can tend to the server/swarm/services... etc.
+
+https://linuxacademy.com/cp/courses/lesson/course/1378/lesson/5/module/150
+
+> What is a Client Bundle?  I think this was on the test.
+
+Using certificates from a Certificate Authority (like Verisign) is straightforward in your environment. We will show you where your new keys and certificates are installed in UCP.
+
+> UCP Client Bundles allow you to provide a preconfigured setup for user accounts set up in UCP, along with the necessary trusted certificates to connect to and use the UCP cluster. You can then control what that user can do by granting roles to the account in UCP; we will show you how to accomplish all of that.
+
+### Web UI
+
+[Client Bundle](client_bundle.png)
+
+unzip ucp-bundle-(username).zip
+eval $(<env.sh>)
+
+Script will update the DOCKER_HOST and DOCKER_CERT_PATH and DOCKER_TLS_VERIFY environment variables to make the Docker CLI client interact with UCP and use the client certificates you downloaded.
+
+```bash
+unzip ucp-bundle-(username).zip
+...
+ca.pem
+cert.pem
+key.pem
+cert.pub
+env.sh
+env.ps1
+env.cmd
+```
+
+Run the script
+
+```bash
+eval $(<env.sh>)
+
+env | grep DOCKER
+DOCKER_HOST=tcp://ucp.example.com:443
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/home/user/Downloads/tcp
+
+
+# if you run docker images, you should get all the images on the DTR server
+docker images
+
+# also you can see all the running on the server
+docker ps
+
+# but ... we can not create a service, we have to grant a role to the user to docker create service
+# create grant, based on role FULL CONTROL to this user.
+docker create service
+
+
+```
+
+### Download client bundle from the command line
+
+```bash
+#To download the client bundle from the command line instead of the UI, follow these steps:
+#Create an environment variable with the user security token:
+AUTHTOKEN=$(curl -sk -d '{"username":"<username>","password":"<password>"}' https://ucp-ip/auth/login | jq -r .auth_token)
+
+# Download the client certificate bundle:
+curl -k -H "Authorization: Bearer $AUTHTOKEN" https://ucp-ip/api/clientbundle -o bundle.zip
+
+```
 
 ## Describe the Process to Use External Certificates with UCP and DTR
+
+https://linuxacademy.com/cp/courses/lesson/course/1378/lesson/6/completed/5/module/150
 
 Using certificates from a Certificate Authority (like Verisign) is straightforward in your environment. We will show you where your new keys and certificates are installed in UCP.
 
@@ -243,13 +340,19 @@ Docker Engine security involves the consideration of four areas:
 1. Customization of container configuration profiles.
 1. Hardening features of the kernel and their interaction with underlying containers.
 
+### Namespaces
+
 Namespaces provide isolation to running containers so they cannot see or affect other processes on the host. Namespaces provide an isolated process, network, and volume stacks to enable that isolation.
 
-Control groups implement resource management (allocating and reporting) to further minimize the effect of a container on a host. As a result, both play a role in minimizing (or mitigating completely) various security risks, such as the denial of service attacks on a container, privilege escalation exploits, etc.
+### Control Groups
+
+Control groups implement resource management (allocating and reporting) to further minimize the effect of a container on a host.
+
+As a result, both play a role in minimizing (or mitigating completely) various security risks, such as the denial of service attacks on a container, privilege escalation exploits, etc.
 
 ### Docker Daemon requires root privilages
 
-Lots of talk about getting rid of that soon...
+Lots of talk about getting rid of that soon...  Be very careful when applying changes.
 
 ### Docker Engine security involves the consideration of four areas
 
@@ -259,38 +362,42 @@ Lots of talk about getting rid of that soon...
 1. Hardening features of the kernel and their interaction with underlying containers.
 
 The ‘attack surface’ is affected by the fact that the **daemon requires ROOT account privileges**, so more care than normal should be applied when changing parameters and/or known secure default configurations.
-Even when ‘trusted users’ are given access to the daemon for control, unknowingly malicious images with ‘docker load’ type commands is a concern. The addition of Docker Enterprise Edition features with UCP, DTR, and Docker Content Trust can address some of those risks.
+
+Even when ‘trusted users’ are given access to the daemon for control, unknowingly malicious images with ‘docker load’ type commands is a concern. The addition of Docker Enterprise Edition features with UCP, DTR, and **Docker Content Trust** can address some of those risks.
+
+> docker load, review this and how I can use to work on a container.
 
 ### Docker Swarm
 
 Docker Swarm makes heavy use of the Overlay Network Model
 
-This model comes prepared with security and support for communication encryption (using the – opt encrypted option when creating the network for use).
+This model comes prepared with security and support for communication encryption (using the –-opt encrypted option when creating the network for use).
 
-> -opt ecnrypted option
+> -opt encrypted option
 
-NOTE: This does NOT extend to Windows, where encryption is not supported.
+NOTE: This does NOT extend to Windows, where encryption is not supported. At least from Docker overlay network.
 
-## Describe Mutually Authenticated TLS (MTLS)  
+## Describe Mutual Transport Layer Security (MTLS)  
 
-Just a passing question... What is it? Where is it used?
+What is it? Where is it used?
 
 What is Mutually Authenticated TLS?
 
-One of the primary goals of Docker Swarm is to be ‘secure by default’; a method to ensure communication within the swarm is implemented.
+One of the primary goals of Docker Swarm is to be **secure by default**; a method to ensure communication within the swarm is implemented.
 
 Mutually Authenticated TLS is the implementation that was chosen to secure that communication.
 
-Any time a swarm is initialized, a self-signed Certificate Authority (CA) is generated and issues certificates to every node (manager or worker) to facilitate those secure communications.
+> Any time a swarm is initialized, a self-signed Certificate Authority (CA) is generated and issues certificates to every node (manager or worker) to facilitate those secure communications.
 
 TLS (Transport Layer Security) was born from the Secure Sockets Layer (SSL) whose name is more well known. However, TLS has since superseded its use. Although their names are often used interchangeably, TLS provides greater security through message authentication, key material generation, and supported cipher suites.
 
-Using the temporary certificates that are generated during a swarm initialization, workers and managers can register themselves with the swarm for communication.
+> Using the temporary certificates that are generated during a swarm initialization, workers and managers can register themselves with the swarm for communication.
 
 Using TLS (Transport Layer Security) provides both privacy and data integrity in communications within the swarm.
+
 The transaction consists of a two-layer (Record and Handshake) protocol that provides both security and authentication.
 
-### Key rotation
+## Key rotation
 
 https://docs.docker.com/engine/swarm/swarm_manager_locking/
 https://docs.docker.com/engine/swarm/swarm_manager_locking/#rotate-the-unlock-key
