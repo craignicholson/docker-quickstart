@@ -4,6 +4,12 @@ This is a collection of information used to learn docker.
 
 ## Outline
 
+3 servers
+Need a registry setup container, always running
+Need a manager
+Need at least 2 nodes for the swarm
+
+
 ### Cheat Sheet
 
 Simple quick refernce of commands and notes to memorize.

@@ -35,8 +35,14 @@ that is performant and supported on your OS's platform.
 | Debian/Ubuntu | aufs3, devicemapper, overlay2, overlay, vfs|
 | Fedora | devicemapper, overlay2, overlay, vfs|
 
-Mac OSX | devicemapper (default only)... i have overlay2
-Windows | devicemapper (default only)
+### Development Machines
+
+These are meant to support multiple storage drivers
+
+| Distribution | Supported Storage Drivers|
+|--------------|--------------------------|
+|Mac OSX | devicemapper (default only)... i have overlay2|
+|Windows | devicemapper (default only)|
 
 ### Workload Use Cases
 
@@ -156,11 +162,11 @@ sudo echo "This is a host file" >> /var/lib/docker/volumes/my-mount/_data/hostfi
 # verify the above statement
 docker service create --name testweb -p 80:80 --mount source=my-mount,target=/internal-mount --detach=false --replicas 3 httpd
 hhe8snhkzc3l467ejt0ow0f0r
-overall progress: 3 out of 3 tasks 
-1/3: running   [==================================================>] 
-2/3: running   [==================================================>] 
-3/3: running   [==================================================>] 
-verify: Service converged 
+overall progress: 3 out of 3 tasks
+1/3: running   [==================================================>]
+2/3: running   [==================================================>]
+3/3: running   [==================================================>]
+verify: Service converged
 
 docker service ls
 ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
@@ -480,6 +486,8 @@ This is a CHANGED website file
 ```
 
 ## Creating a Bind Mount to Link Container Filesystem to Host Filesystem
+
+The 'bind' type will allow the container access to the underlying host operating system from the indicated target directory in the container filesystem.
 
 ```bash
 

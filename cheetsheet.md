@@ -2149,6 +2149,4 @@ load/save
 
 1. secrets was on the test
 
-1. there was template question of some type... 
-
-
+1. there was template question of some type...
