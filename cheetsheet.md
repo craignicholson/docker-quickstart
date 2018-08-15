@@ -394,11 +394,10 @@ EXPOSE - containers will listen on the indicated port at lauch.
 
 RUN - stick your apt-gets and yums here to install packages
 
-## docker prune
+## docker system prune
 
 Use docker prune to reset back to a base install.
-
-> docker prune -a --volumes
+> docker system prune -a --volumes
 
 --all (-a)
 --force (-f)
@@ -2151,3 +2150,5 @@ load/save
 1. secrets was on the test
 
 1. there was template question of some type... 
+
+
