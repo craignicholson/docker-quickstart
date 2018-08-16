@@ -75,6 +75,23 @@ sudo yum install -y mysql
 7.Connect to the MySQL container instance via the MySQL client and log in.
 
 ```bash
+hostnamectl
+   Static hostname: localhost.localdomain
+Transient hostname: ip-10-0-1-230
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: 2210627223604f57a81d42c82658e704
+           Boot ID: a1b74394dec9400b9259325f515d96eb
+    Virtualization: xen
+  Operating System: CentOS Linux 7 (Core)
+       CPE OS Name: cpe:/o:centos:centos:7
+            Kernel: Linux 3.10.0-514.16.1.el7.x86_64
+      Architecture: x86-64
+
+
+cat /etc/centos-release
+CentOS Linux release 7.5.1804 (Core) 
+
 https://downloads.mariadb.org/mariadb/repositories/#mirror=rackspace&distro=CentOS&distro_release=centos7-ppc64le--centos7&version=10.3
 
 [linuxacademy@localhost ~]$ mysql -h 172.17.0.2 

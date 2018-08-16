@@ -8,9 +8,9 @@ All about the running of containers and not how we manage all the containers we 
 
 - Encapsulate application or function
 - Run on a single host
-- Require manual steps to expose functionaliytoutside of the house system (ports, network and volumes)
-- Require more complex configuration to use multiple instance (proxies for example)
-- Not highly availablem you can try to make the avialable with effort.
+- Require manual steps to expose functionality outside of the host system (ports, network and volumes)
+- More complex configuration to use multiple instance (proxies for example)
+- Not highly available -  you can try to make the avialable with effort.
 - Not easily scalable
 
 ### Services - docker service (SWARM)
