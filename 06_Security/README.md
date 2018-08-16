@@ -211,8 +211,7 @@ user, organization, and/or team by using grants.
 |--------------|-------------|
 |NONE | No access to swarm resources. |
 |VIEW ONLY | User can VIEW resources (services, volumes, networks) but cannot create/delete/modiy them.|
-|RESTRICTED CONTROL | Grants the ability to view and edit volumes, networks, images but cannot run.|
-|services or containers on the running node.  restricts ability to mount a node directly or 'exec' into running containers.|
+|RESTRICTED CONTROL | Grants the ability to view and edit volumes, networks, images but cannot run services or containers on the running node.  Restricts ability to mount a node directly or 'exec' into running containers.|
 |SCHEDULER | Allowed to view nodes and schedule workloads. Need additional resource permissions, like container view to perform other tasks.|
 |FULL CONTROL | User allowed to view and edit network, images, volumes as well as create containers and services without restrition. They CANNOT see other users containers and services.|
 
@@ -373,7 +372,15 @@ Docker Swarm makes heavy use of the Overlay Network Model
 
 This model comes prepared with security and support for communication encryption (using the –-opt encrypted option when creating the network for use).
 
+https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network
+
 > -opt encrypted option
+
+You can use the overlay network feature with both --opt encrypted --attachable and attach unmanaged containers to that network:
+
+```bash
+docker network create --opt encrypted --driver overlay --attachable my-attachable-multi-host-network
+```
 
 NOTE: This does NOT extend to Windows, where encryption is not supported. At least from Docker overlay network.
 

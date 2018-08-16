@@ -453,6 +453,7 @@ docker service create --name redis redis:3.0.6
 docker service create --name redis --replicas=5 redis:3.0.6
 
 # Create a service with secrets
+# https://docs.docker.com/engine/swarm/secrets/#read-more-about-docker-secret-commands
 docker service create --name redis --secret secret.json redis:3.0.6
 
 # Create a service specifying the secret, target, user/group ID, and mode:
