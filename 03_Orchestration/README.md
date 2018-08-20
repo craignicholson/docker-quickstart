@@ -1,5 +1,84 @@
 # Orchestration
 
+## Complete the setup of a swarm mode cluster, with managers and worker nodes
+
+### Options
+
+```bash
+docker swarm --help
+
+Usage: docker swarm COMMAND
+
+Manage Swarm
+
+Commands:
+  ca          Display and rotate the root CA
+  init        Initialize a swarm
+  join        Join a swarm as a node and/or manager
+  join-token  Manage join tokens
+  leave       Leave the swarm
+  unlock      Unlock swarm
+  unlock-key  Manage the unlock key
+  update      Update the swarm
+```
+
+| Related commands | Command Description|
+|------------------|--------------------|
+| docker swarm ca | Display and rotate the root CA|
+| docker swarm init | Initialize a swarm|
+| docker swarm join | Join a swarm as a node and/or manager|
+| docker swarm join-token | Manage join tokens|
+| docker swarm leave | Leave the swarm|
+| docker swarm unlock | Unlock swarm|
+| docker swarm unlock-key | Manage the unlock key|
+| docker swarm update | Update the swarm|
+
+### docker swarm init
+
+Manager Node - Node0, IP 10.0.1.1
+
+```bash
+docker swarm init --advertise-addr 10.0.1.1
+Swarm initialized: current node (bvz81updecsj6wjz393c09vti) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join \
+    --token SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-1awxwuwd3z9j1z3puu7rcgdbx \
+    10.0.1.1:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+```
+
+Worker Node - Node1, IP 10.0.1.2
+
+```bash
+    docker swarm join \
+    --token SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-1awxwuwd3z9j1z3puu7rcgdbx \
+    10.0.1.1:2377
+```
+
+Worker Node - Node1, IP 10.0.1.3
+
+```bash
+    docker swarm join \
+    --token SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-1awxwuwd3z9j1z3puu7rcgdbx \
+    10.0.1.1:2377
+```
+
+### Additional swarm init flags
+
+--data-path-addr
+This flag specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is then possible to separate the container’s data traffic from the management traffic of the cluster. If unspecified, Docker will use the same IP address or interface that is used for the advertise address.
+
+--cert-expiry
+2160h0m0s
+Validity period for node certificates (ns|us|ms|s|m|h)
+
+```bash
+docker swarm update --cert-expiry 720h
+```
+
 ## State the Difference Between Running a Container and Running a Service
 
 ### Containers - docker run
@@ -70,7 +149,8 @@ Unlock the swarm (after we are already running)
 docker swarm unlock-key
 
 
-# also we can unlock imediately. if we are still on the manager
+# also we can unlock immediately. if we are still on the manager
+# you will not be prompted for a key or pwd.
 docker swarm udpate autolock=false
 
 sudo systemctl stop docker
@@ -259,7 +339,7 @@ will not be able to restart the manager.
 
 ```
 
-### Periodically Change the Key with key rotation.
+### Periodically Change the Key with key rotation
 
 ```bash
 
@@ -397,7 +477,6 @@ of the nodes in the cluster by their own IP, the routing is handled but the cont
 ```bash
 # create a service on the managment (manager) of the swarm
 # each node will get this port mapped to the host port
-# 
 docker service create --name testweb --publish 80:80 httpd
 
 # review the swarm status
@@ -477,6 +556,7 @@ docker service create \
   --env MYVAR=foo \
   redis:3.0.6
 
+# Set environment variables (-e, --env)
 docker service create \
   --name redis_2 \
   --replicas 5 \
@@ -2095,6 +2175,16 @@ Requirements/Considerations
 • docker node update –availability drain [node]
 • Force Rebalance
 • docker service update --force
+
+### docker node update –availability drain [node]
+
+This flag specifies the availability of the node at the time the node joins a master. Possible availability values are **active**, **pause**, or **drain**.
+
+This flag is useful in certain situations. For example, a cluster may want to have dedicated manager nodes that are not served as worker nodes. This could be achieved by passing --availability=drain to docker swarm init.
+
+```bash
+docker swarm init --availability=drain
+```
 
 ## Create a Swarm Cluster
 

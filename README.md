@@ -174,20 +174,31 @@ docker swarm unlock
 Please enter unlock key:
 ```
 
-● Extend the instructions to run individual containers into running services under swarm
-● Interpret the output of "docker inspect" commands
-● Convert an application deployment into a stack file using a YAML compose file with
-"docker stack deploy"
-● Manipulate a running stack of services
-● Increase # of replicas
-● Add networks, publish ports
-● Mount volumes
-● Illustrate running a replicated vs global service
-● Identify the steps needed to troubleshoot a service not deploying
-● Apply node labels to demonstrate placement of tasks
-● Sketch how a Dockerized application communicates with legacy systems
-● Paraphrase the importance of quorum in a swarm cluster
-● Demonstrate the usage of templates with "docker service create"
+#### Extend the instructions to run individual containers into running services under swarm
+
+#### Interpret the output of "docker inspect" commands
+
+#### Convert an application deployment into a stack file using a YAML compose file with "docker stack deploy"
+
+#### Manipulate a running stack of services
+
+#### Increase # of replicas
+
+#### Add networks, publish ports
+
+#### Mount volumes
+
+#### Illustrate running a replicated vs global service
+
+#### Identify the steps needed to troubleshoot a service not deploying
+
+#### Apply node labels to demonstrate placement of tasks
+
+#### Sketch how a Dockerized application communicates with legacy systems
+
+#### Paraphrase the importance of quorum in a swarm cluster
+
+#### Demonstrate the usage of templates with "docker service create"
 
 - State the Difference Between Running a Container and Running a Service
 - Demonstrate Steps to Lock (and Unlock) a Cluster
